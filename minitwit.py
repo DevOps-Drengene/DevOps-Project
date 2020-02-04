@@ -97,7 +97,7 @@ def timeline():
     print("We got a visitor from: " + str(request.remote_addr))
     if not g.user:
         return redirect(url_for('public_timeline'))
-    offset = request.args.get('offset', type=int)
+    # offset = request.args.get('offset', type=int)
     return render_template('timeline.html', messages=query_db('''
         select message.*, user.* from message, user
         where message.author_id = user.user_id and (
@@ -124,7 +124,7 @@ def user_timeline(username):
                             [username], one=True)
     if profile_user is None:
         abort(404)
-    followd = False # bug?
+    followed = False
     if g.user:
         followed = query_db('''select 1 from follower where
             follower.who_id = ? and follower.whom_id = ?''',

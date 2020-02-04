@@ -8,7 +8,7 @@
     :copyright: (c) 2010 by Armin Ronacher.
     :license: BSD, see LICENSE for more details.
 """
-from __future__ import with_statement
+
 import re
 import time
 import sqlite3
@@ -39,7 +39,7 @@ def init_db():
     """Creates the database tables."""
     with closing(connect_db()) as db:
         with app.open_resource('schema.sql') as f:
-            db.cursor().executescript(f.read())
+            db.cursor().executescript(f.read().decode('utf-8'))
         db.commit()
 
 
@@ -94,13 +94,13 @@ def timeline():
     redirect to the public timeline.  This timeline shows the user's
     messages as well as all the messages of followed users.
     """
-    print "We got a visitor from: " + str(request.remote_addr)
+    print("We got a visitor from: " + str(request.remote_addr))
     if not g.user:
         return redirect(url_for('public_timeline'))
     offset = request.args.get('offset', type=int)
     return render_template('timeline.html', messages=query_db('''
         select message.*, user.* from message, user
-        where message.author_id = user.user_id and (
+        where message.flagged = 0 and message.author_id = user.user_id and (
             user.user_id = ? or
             user.user_id in (select whom_id from follower
                                     where who_id = ?))
@@ -113,7 +113,7 @@ def public_timeline():
     """Displays the latest messages of all users."""
     return render_template('timeline.html', messages=query_db('''
         select message.*, user.* from message, user
-        where message.author_id = user.user_id
+        where message.flagged = 0 and message.author_id = user.user_id
         order by message.pub_date desc limit ?''', [PER_PAGE]))
 
 
@@ -173,8 +173,8 @@ def add_message():
     if 'user_id' not in session:
         abort(401)
     if request.form['text']:
-        g.db.execute('''insert into message (author_id, text, pub_date)
-            values (?, ?, ?)''', (session['user_id'], request.form['text'],
+        g.db.execute('''insert into message (author_id, text, pub_date, flagged)
+            values (?, ?, ?, 0)''', (session['user_id'], request.form['text'],
                                   int(time.time())))
         g.db.commit()
         flash('Your message was recorded')

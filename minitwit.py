@@ -39,7 +39,7 @@ def init_db():
     """Creates the database tables."""
     with closing(connect_db()) as db:
         with app.open_resource('schema.sql') as f:
-            db.cursor().executescript(f.read())
+            db.cursor().executescript(f.read().decode('utf-8'))
         db.commit()
 
 
@@ -241,8 +241,8 @@ def logout():
 
 # add some filters to jinja and set the secret key and debug mode
 # from the configuration.
-# app.jinja_env.filters['datetimeformat'] = format_datetime
-# app.jinja_env.filters['gravatar'] = gravatar_url
+app.jinja_env.filters['datetimeformat'] = format_datetime 
+app.jinja_env.filters['gravatar'] = gravatar_url
 app.secret_key = SECRET_KEY
 app.debug = DEBUG
 

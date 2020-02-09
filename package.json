@@ -1,0 +1,10 @@
+{
+  "name": "devops-project",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "puppeteer": "2.1.1"
+  }
+}

@@ -2,7 +2,7 @@
   "name": "devops-project",
   "version": "1.0.0",
   "scripts": {
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "devDependencies": {
     "jest": "^25.1.0",

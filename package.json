@@ -2,9 +2,11 @@
   "name": "devops-project",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
-  "dependencies": {
-    "puppeteer": "2.1.1"
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "jest-cli": "^25.1.0",
+    "puppeteer": "^2.1.1"
   }
 }

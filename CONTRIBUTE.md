@@ -8,8 +8,8 @@ The project is split up in two distributed repositories – one for the frontend
 
 The repositories, hosted on GitHub, support an intended centralized workflow in which each one of them acts as a shared repository that all contributors contribute their work to.
 
-Link to frontend repository: https://github.com/caspar-itu/minitwit-react-frontend
-Link to backend repository: http://github.com/emilbartholdy
+Link to frontend repository: https://github.com/DevOps-Drengene/minitwit-react-frontend
+Link to backend repository: https://github.com/DevOps-Drengene/minitwit-backend
 
 ## Integrating contributions
 

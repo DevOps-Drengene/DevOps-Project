@@ -5,6 +5,7 @@ This document summarizes how work is organized and structured using Git to lay o
 ## The project's structure in repositories
 
 The project is split up in two distributed repositories – one for the frontend and backend part of the application. This is done to completely separate the two subsystems from each other, and let the repositories be managed by their own version control setup to control releases and such independently.
+These repositories are added as submodules to [this "main" repository](https://github.com/DevOps-Drengene/DevOps-Project) that controls the primary releases of the project.
 
 The repositories, hosted on GitHub, support an intended centralized workflow in which each one of them acts as a shared repository that all contributors contribute their work to.
 

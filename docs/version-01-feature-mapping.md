@@ -77,7 +77,7 @@ It allows the user to sign out of the service. It destroys the user session and 
 
 **Access:**
 
-It is NOT a requirement to be logged in to access this page.
+It is a requirement to be logged in to sign out, however, any user can access the page.
 
 
 
@@ -114,5 +114,5 @@ It is a requirement to be logged in to view this page. If the user is not signed
 
 **Access:**
 
-It is a requirement to be logged in to view this page. If the user is not signed in, then the application crashes (feature or bug? 🤔).
+It is a requirement to be logged in to view this page. If the user is not signed in, then the application crashes which has been identified to be a bug in the application.
 

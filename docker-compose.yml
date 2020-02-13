@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+    simulator-api:
+        build: ./minitwit-backend
+        ports:
+            - "5001:5001"
+        volumes:
+            - /tmp/minitwit.db:/tmp/minitwit.db
+        command: npm run simulator
+
+    custom-api:
+        build: ./minitwit-backend
+        ports:
+            - "5000:5001"
+        volumes:
+            - /tmp/minitwit.db:/tmp/minitwit.db
+        command: npm start
+
+    frontend:
+        build: ./minitwit-react-frontend
+        ports:
+            - "3000:3000"
+        depends_on:
+            - custom-api

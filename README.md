@@ -33,7 +33,6 @@
    $ source ~/.bashrc
    ```
 3. Deploy to Digital Ocean
-
    ```bash
    $ vagrant up
    ```

@@ -20,7 +20,15 @@ Vagrant.configure("2") do |config|
       server.vm.hostname = "backend"
 
       server.vm.provision "shell", inline: <<-SHELL
-        echo "WHAT'S UP DEVOPS-DRENGE??"
+        echo "Running: cd ../vagrant/"
+        cd ../vagrant/
+        echo "Current Directory is now: "$PWD
+        echo "Running: apt --yes install docker-compose"
+        apt --yes install docker-compose
+        echo "Running: docker-compose build"
+        docker-compose build
+        echo "Running: docker-compose up"
+        docker-compose up
       SHELL
     end
 

@@ -32,7 +32,11 @@
    ```bash
    $ source ~/.bashrc
    ```
-3. Deploy to Digital Ocean
+3. Install Digital Ocean plugin for Vagrant
+   ```bash
+   $ vagrant plugin install vagrant-digitalocean
+   ```
+4. Deploy to Digital Ocean
    ```bash
    $ vagrant up
    ```

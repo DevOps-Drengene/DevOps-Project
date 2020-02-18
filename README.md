@@ -1,19 +1,15 @@
 # DevOps-Project
 
 ## Setup and run
-1. Init database:
-    ```bash
-    $ node minitwit-backend/src/init.js
-    ```
-2. Build application:
+1. Build application:
     ```bash
     $ docker-compose build
     ```
-3. Run application:
+2. Run application:
     ```bash
     $ docker-compose up
     ```
-4. Following endpoints is opened:
+3. Following endpoints is opened:
     - Frontend: `localhost:3000`
     - Custom API: `localhost:5000`
     - Simulator API: `localhost:5001`

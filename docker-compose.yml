@@ -1,21 +1,37 @@
 version: '3'
 
 services:
+    db:
+        image: postgres
+        expose:
+            - "5432"
+        # Upon startup, it will create a Postgress user 'docker' with password 'docker',
+        # and a database called 'minitwit'.
+        environment:
+            - POSTGRES_USER=docker
+            - POSTGRES_PASSWORD=docker
+            - POSTGRES_DB=minitwit
+
     simulator-api:
         build: ./minitwit-backend
         ports:
             - "5001:5001"
-        volumes:
-            - /tmp/minitwit.db:/tmp/minitwit.db
         command: npm run simulator
+        depends_on:
+            - db
+        environment:
+            - PSQL_DB_NAME=minitwit         # Must be the same as 'POSTGRES_DB' in 'db' service
+            - PSQL_DB_USER_NAME=docker      # Must be the same as 'POSTGRES_USER' in 'db' service
+            - PSQL_DB_USER_PASSWORD=docker  # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
+            - PSQL_HOST_NAME=db             # Must be the same as the name of the 'db' service
 
     custom-api:
         build: ./minitwit-backend
         ports:
             - "5000:5001"
-        volumes:
-            - /tmp/minitwit.db:/tmp/minitwit.db
         command: npm start
+        depends_on:
+            - db
 
     frontend:
         build: ./minitwit-react-frontend

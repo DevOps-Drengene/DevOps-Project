@@ -32,6 +32,11 @@ services:
         command: npm start
         depends_on:
             - db
+        environment:
+            - PSQL_DB_NAME=minitwit         # Must be the same as 'POSTGRES_DB' in 'db' service
+            - PSQL_DB_USER_NAME=docker      # Must be the same as 'POSTGRES_USER' in 'db' service
+            - PSQL_DB_USER_PASSWORD=docker  # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
+            - PSQL_HOST_NAME=db             # Must be the same as the name of the 'db' service
 
     frontend:
         build: ./minitwit-react-frontend

@@ -1,0 +1,55 @@
+{
+  "devOps": {
+    "docker": "2.2.0.3",
+    "docker-compose": "1.25.4",
+    "vagrant": "2.2.7",
+    "vagrant-digitalocean": "0.9.3"
+  },
+  "frontEnd": {
+    "runTime": {
+      "md5": "^2.2.1",
+      "react": "^16.12.0",
+      "react-dom": "^16.12.0",
+      "react-jss": "^10.0.4",
+      "react-router-dom": "^5.1.2",
+      "react-scripts": "3.3.1",
+      "prop-types": "^15.7.2"
+    },
+    "buildTime": {
+      "node": "13.8.0",
+      "eslint": "^6.8.0",
+      "eslint-config-airbnb": "^18.0.1",
+      "eslint-plugin-import": "^2.20.1",
+      "eslint-plugin-jsx-a11y": "^6.2.3",
+      "eslint-plugin-react": "^7.18.3",
+      "eslint-plugin-react-hooks": "^1.7.0"
+    },
+    "testing": {
+      "jest": "^25.1.0",
+      "jest-cli": "^25.1.0",
+      "puppeteer": "^2.1.1"
+    }
+  },
+  "backEnd": {
+    "runTime": {
+      "node": "13.8.0",
+      "bcrypt": "^3.0.8",
+      "body-parser": "^1.19.0",
+      "cors": "^2.8.5",
+      "express": "^4.17.1",
+      "pg": "^7.18.1",
+      "pg-hstore": "^2.3.3",
+      "sequelize": "^5.21.4"
+    },
+    "buildTime": {
+      "eslint": "^6.8.0",
+      "eslint-config-airbnb-base": "^14.0.0",
+      "eslint-plugin-import": "^2.20.1"
+    },
+    "testing": {
+      "python": "3.7.4",
+      "pytest": "5.3.5",
+      "requests": "2.22.0"
+    }
+  }
+}

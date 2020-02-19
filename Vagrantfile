@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
         echo "Running: docker-compose build"
         docker-compose build
         echo "Running: docker-compose up"
-        docker-compose up
+        docker-compose up -d
       SHELL
     end
 

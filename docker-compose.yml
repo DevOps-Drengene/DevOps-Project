@@ -13,7 +13,7 @@ services:
             - POSTGRES_DB=minitwit
 
     simulator-api:
-        build: ./minitwit-backend
+        build: ./backend
         ports:
             - "5001:5001"
         command: npm run simulator
@@ -26,7 +26,7 @@ services:
             - PSQL_HOST_NAME=db             # Must be the same as the name of the 'db' service
 
     custom-api:
-        build: ./minitwit-backend
+        build: ./backend
         ports:
             - "5000:5001"
         command: npm start
@@ -39,7 +39,7 @@ services:
             - PSQL_HOST_NAME=db             # Must be the same as the name of the 'db' service
 
     frontend:
-        build: ./minitwit-react-frontend
+        build: ./frontend
         ports:
             - "3000:3000"
         depends_on:

@@ -1,6 +1,0 @@
-[submodule "minitwit-backend"]
-	path = minitwit-backend
-	url = git@github.com:DevOps-Drengene/minitwit-backend.git
-[submodule "minitwit-react-frontend"]
-	path = minitwit-react-frontend
-	url = git@github.com:DevOps-Drengene/minitwit-react-frontend.git

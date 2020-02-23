@@ -1,0 +1,24 @@
+name: PULL-REQUEST
+
+on: pull_request
+
+jobs:
+  eslint-backend:
+    name: ESLint (Backend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd backend
+          npm install
+          ./node_modules/.bin/eslint .
+                               
+  eslint-frontend:
+    name: ESLint (Frontend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd frontend
+          npm install --no-optional # --no-optional flag is set to fix this error: https://bit.ly/2VmFFcm
+          ./node_modules/.bin/eslint .

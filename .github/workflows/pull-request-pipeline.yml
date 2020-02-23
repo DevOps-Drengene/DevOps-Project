@@ -23,7 +23,7 @@ jobs:
           npm install --no-optional # --no-optional flag is set to fix this error: https://bit.ly/2VmFFcm
           ./node_modules/.bin/eslint .
 
-    integration-tests:
+  integration-tests:
     name: Integration tests
     runs-on: ubuntu-latest
     needs: [eslint-backend, eslint-frontend]
@@ -34,3 +34,14 @@ jobs:
           docker build -t minitwit-simulator-integration-test ./tests/simulator-integration-test -f ./tests/simulator-integration-test/Dockerfile
           docker-compose up -d --force-recreate
           docker run --network=minitwit-network minitwit-simulator-integration-test
+
+  e2e-tests:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    needs: [integration-tests]
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd tests
+          npm install
+          npm test

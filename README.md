@@ -37,6 +37,11 @@
    $ vagrant up
    ```
 
+## How to run flag tool
+1. Bring up the application as described in the 'Setup and run' section.
+2. Run `docker build -t minitwit-flagtool -f ./backend/Dockerfile-flagtool ./backend` to build the Docker image with the flag tool.
+3. Run `docker run --network=minitwit-network minitwit-flagtool (args...)` to run the flag tool.
+
 ## How to run integration tests for simulator in Docker container:
 1. Run `docker-compose build` to build all application images.
 2. Run `docker build -t minitwit-simulator-integration-test ./tests/simulator-integration-test -f ./tests/simulator-integration-test/Dockerfile` to build Docker image with simulator integration tests.

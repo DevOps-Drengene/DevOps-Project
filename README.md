@@ -37,7 +37,19 @@
    $ vagrant up
    ```
 
+## How to run integration tests for simulator in Docker container:
+1. Run `docker-compose build` to build all application images.
+2. Run `docker build -t minitwit-simulator-integration-test ./tests/simulator-integration-test -f ./tests/simulator-integration-test/Dockerfile` to build Docker image with simulator integration tests.
+3. Run `docker-compose up -d --force-recreate` to run application in detached mode.
+4. Run `docker run --network=minitwit-network minitwit-simulator-integration-test` to execute simulator integration test.
+
+## How to setup and run (minified) simulator in Docker container:
+1. Run `docker-compose build` to build all application images.
+2. Run `docker build -t minitwit-simulator ./tests/simulator -f ./tests/simulator/Dockerfile` to build Docker image with simulator test.
+3. Run `docker-compose up -d --force-recreate` to run application in detached mode.
+4. Run `docker run --network=minitwit-network minitwit-simulator` to execute simulator test.
+
 ## How to setup and run E2E test
-1. Setup and start the application as described in last section.
+1. Setup and start the application as described in 'Setup and run' section.
 2. Navigate to the `tests` directory and run the following command to install all required dependencies: `npm install`
 4. In the `tests` directory, run the following command to start the E2E test: `npm test`

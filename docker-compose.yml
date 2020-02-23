@@ -1,8 +1,14 @@
-version: '3'
+version: '3.5'
+
+networks:
+    main:
+        name: minitwit-network
 
 services:
     db:
         image: postgres
+        networks:
+            - main
         expose:
             - "5432"
         # Upon startup, it will create a Postgress user 'docker' with password 'docker',
@@ -14,6 +20,8 @@ services:
 
     simulator-api:
         build: ./backend
+        networks:
+            - main
         ports:
             - "5001:5001"
         command: npm run simulator
@@ -27,6 +35,8 @@ services:
 
     custom-api:
         build: ./backend
+        networks:
+            - main
         ports:
             - "5000:5001"
         command: npm start
@@ -40,6 +50,8 @@ services:
 
     frontend:
         build: ./frontend
+        networks:
+            - main
         ports:
             - "3000:3000"
         depends_on:

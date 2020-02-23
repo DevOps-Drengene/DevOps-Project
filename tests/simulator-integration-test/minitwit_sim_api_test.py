@@ -5,7 +5,7 @@ import sqlite3
 import requests
 from contextlib import closing
 
-BASE_URL = 'http://127.0.0.1:5001'
+BASE_URL = 'http://simulator-api:5001'
 USERNAME = 'simulator'
 PWD = 'super_safe!'
 CREDENTIALS = ':'.join([USERNAME, PWD]).encode('ascii')

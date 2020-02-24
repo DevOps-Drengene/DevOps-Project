@@ -115,7 +115,8 @@ app.get('/user/:username/:currentUserId?', async (req, res) => {
 
     let following = false;
     if (currentUserId) {
-      const followingRes = await profileUser.getFollow({ where: { id: currentUserId } });
+      const currentUser = await db.user.findByPk(currentUserId);
+      const followingRes = await currentUser.getFollow({ where: { id: profileUser.id } });
       following = !!(followingRes.length);
     }
 

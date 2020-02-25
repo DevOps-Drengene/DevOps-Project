@@ -35,16 +35,16 @@ jobs:
           docker-compose up -d --force-recreate
           docker run --network=minitwit-network minitwit-simulator-integration-test
 
-  e2e-tests:
-    name: E2E tests
-    runs-on: ubuntu-latest
-    needs: [integration-tests]
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          cd tests
-          npm install
-          npm test
+#  e2e-tests:
+#    name: E2E tests
+#    runs-on: ubuntu-latest
+#    needs: [integration-tests]
+#    steps:
+#      - uses: actions/checkout@v2
+#      - run: |
+#          cd tests
+#          npm install
+#          npm test
 
   simulator-tests:
     name: Simulator tests

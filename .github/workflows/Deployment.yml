@@ -1,0 +1,50 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  BuildAndDeploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Push backend to Dockerhub
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: dagandersen/backend
+        username: ${{ secrets.DOCKER_DAG_TEST_USER }}
+        password: ${{ secrets.DOCKER_DAG_TEST_PASSWORD }}
+        workdir: backend
+    - uses: actions/checkout@master
+    - name: Push frontend to Dockerhub
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: dagandersen/frontend
+        username: ${{ secrets.DOCKER_DAG_TEST_USER }}
+        password: ${{ secrets.DOCKER_DAG_TEST_PASSWORD }}
+        workdir: frontend
+
+    - uses: actions/checkout@master
+    - name: Copy files via scp
+      uses: appleboy/scp-action@master
+      env:
+        HOST: ${{ secrets.server_ip }}
+        USERNAME: ${{ secrets.server_user }}
+        KEY: ${{ secrets.CI_private_key }}
+      with:
+        source: "."
+        target: "/vagrant/"
+
+    - name: Docker-Compose Pull and Up
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.server_ip }}
+        USERNAME: ${{ secrets.server_user }}
+        KEY: ${{ secrets.CI_private_key }}
+        script: |
+          cd /vagrant/
+          docker-compose pull 
+          docker-compose up -d

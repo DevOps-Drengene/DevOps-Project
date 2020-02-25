@@ -1,0 +1,6 @@
+version: '3.5'
+
+services:
+  db:
+    volumes:
+      - /mnt/prod-db-volume/docker/volumes/minitwit/postgres-data:/var/lib/postgresql/data

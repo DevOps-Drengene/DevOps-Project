@@ -3,7 +3,7 @@ version: '3.5'
 networks:
     main:
         name: minitwit-network
-
+        
 services:
     db:
         image: postgres
@@ -24,7 +24,8 @@ services:
             - main
         ports:
             - "5001:5001"
-        command: npm run simulator
+        # Manual hack: wait for DB to be ready, and then start container
+        command: /bin/sh -c 'while ! nc -z db 5432; do sleep 1; done; npm run simulator'
         depends_on:
             - db
         environment:
@@ -39,9 +40,11 @@ services:
             - main
         ports:
             - "5000:5001"
-        command: npm start
+        # Manual hack: wait for DB to be ready, and then start container
+        command: /bin/sh -c 'while ! nc -z db 5432; do sleep 1; done; npm start'
         depends_on:
             - db
+            - simulator-api
         environment:
             - PSQL_DB_NAME=minitwit         # Must be the same as 'POSTGRES_DB' in 'db' service
             - PSQL_DB_USER_NAME=docker      # Must be the same as 'POSTGRES_USER' in 'db' service

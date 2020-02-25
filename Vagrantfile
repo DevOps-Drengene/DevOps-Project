@@ -20,6 +20,9 @@ Vagrant.configure("2") do |config|
       server.vm.hostname = "backend"
 
       server.vm.provision "shell", inline: <<-SHELL
+        echo "Making production database folder..."
+        # Requires attached block storage called 'prod-db-volume' to Droplet
+        mkdir -p /mnt/prod-db-volume/docker/volumes/minitwit/postgres-data
         echo "Running: cd ../vagrant/"
         cd ../vagrant/
         echo "Current Directory is now: "$PWD
@@ -27,8 +30,8 @@ Vagrant.configure("2") do |config|
         apt --yes install docker-compose
         echo "Running: docker-compose build"
         docker-compose build
-        echo "Running: docker-compose up"
-        docker-compose up -d
+        echo "Running: docker-compose up in production mode"
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
       SHELL
     end
 

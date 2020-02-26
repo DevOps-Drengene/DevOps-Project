@@ -46,5 +46,5 @@ jobs:
         KEY: ${{ secrets.CI_private_key }}
         script: |
           cd /vagrant/
-          docker-compose pull 
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull 
           docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d

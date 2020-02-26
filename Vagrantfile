@@ -30,9 +30,9 @@ Vagrant.configure("2") do |config|
         sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
         echo "Running: docker-compose pull"
-        docker-compose pull
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
         echo "Running: docker-compose up in production mode"
-        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+        docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
       SHELL
     end
 

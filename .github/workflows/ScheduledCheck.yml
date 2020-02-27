@@ -1,8 +1,9 @@
 name: Scheduled simulator-test on prod
 
 on:
-  schedule:
-    - cron:  '*/5 * * * *' # Check runs every 12th hour
+  push:
+    branches:
+      - scheduledPythonTest
 
 jobs:
   simulator-test:
@@ -16,7 +17,7 @@ jobs:
         python-version: '3.x'
     - name: Install dependencies
       run: |
-        cd tests/schedualed_test/
+        cd tests/scheduled_test/
         python -m pip install --upgrade pip
         pip install
         bash test

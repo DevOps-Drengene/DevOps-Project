@@ -1,9 +1,8 @@
 name: Scheduled simulator-test on prod
 
 on:
-  push:
-    branches:
-      - scheduledPythonTest
+  schedule:
+    - cron:  '* */12 * * *'
 
 jobs:
   simulator-test:

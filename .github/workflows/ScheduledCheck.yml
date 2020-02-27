@@ -1,0 +1,16 @@
+name: Scheduled simulator-test on prod
+
+on:
+  schedule:
+    - csron:  '15 * * * *' # Check runs every 12th hour
+
+jobs:
+  eslint-backend:
+    name: simulator-test on server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd tests/simulator
+          bash test.sh
+                               

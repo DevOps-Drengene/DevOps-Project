@@ -2,15 +2,21 @@ name: Scheduled simulator-test on prod
 
 on:
   schedule:
-    - csron:  '15 * * * *' # Check runs every 12th hour
+    - cron:  '*/5 * * * *' # Check runs every 12th hour
 
 jobs:
-  eslint-backend:
+  simulator-test:
     name: simulator-test on server
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: |
-          cd tests/simulator
-          bash test.sh
-                               
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        cd tests/schedualed_test/
+        python -m pip install --upgrade pip
+        pip install
+        bash test

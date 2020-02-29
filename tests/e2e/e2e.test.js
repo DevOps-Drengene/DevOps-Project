@@ -1,8 +1,6 @@
 const puppeteer = require('puppeteer');
-const util = require('util');
-const exec = util.promisify(require('child_process').exec);
 
-const defaultTimeoutTime = 32000; // 32 seconds
+const defaultTimeoutTime = 10000; // 10 seconds
 
 const baseUrl = 'http://localhost:3000';
 const routes = {
@@ -18,86 +16,99 @@ let browser;
 let page;
 
 beforeAll(async () => {
-    startApp();
-
-    browser = await puppeteer.launch({ headless: false });
+    browser = await puppeteer.launch({ headless: true }); // If headless = true then tests are run in UI browser (Chromium), else it is running as a background process (headless - only possible in CI pipeline)
     page = await browser.newPage();
 });
 
 describe('Test register', () => {
-    beforeAll(async () => await prepareNewSession());
+    async function testRegisterForm(formData, stringAssert, locationAssert) {
+        await registerOnPage(formData);
+        await waitForFormSubmissionToFinish();
+
+        await stringAssert();
+        locationAssert();
+    }
 
     test('User can register with valid information', async () => {
-        await registerOnPage(mapDefaultUserToRegisterForm());
-        await page.waitForNavigation();
-
-        assertPageIsLocatedAtRoute(routes.login);
+        await testRegisterForm(
+            mapDefaultUserToRegisterForm(),
+            async () => null,
+            () => assertPageIsLocatedAtRoute(routes.login)
+        );        
     }, defaultTimeoutTime);
 
     test('User cannot register when submitted username is already taken', async () => {
         const formData = mapDefaultUserToRegisterForm();
         formData.username = defaultUser.username; // Was submitted in previous test
-        
-        await registerOnPage(formData);
 
-        await assertPageContainsString('The username is already taken');
-        assertPageIsLocatedAtRoute(routes.register);
+        await testRegisterForm(
+            formData,
+            async () => await assertPageContainsString('The username is already taken'),
+            () => assertPageIsLocatedAtRoute(routes.register)
+        );
     }, defaultTimeoutTime);
 
     test('User cannot register when submitted username is blank', async () => {
         const formData = mapDefaultUserToRegisterForm();
         formData.username = '';
 
-        await registerOnPage(formData);
-
-        await assertPageContainsString('You must fill out all fields');
-        assertPageIsLocatedAtRoute(routes.register);
+        await testRegisterForm(
+            formData,
+            async () => await assertPageContainsString('You must fill out all fields'),
+            () => assertPageIsLocatedAtRoute(routes.register)
+        );
     }, defaultTimeoutTime);
 
     test('User cannot register when submitted password is blank', async () => {
         const formData = mapDefaultUserToRegisterForm();
         formData.password = '';
 
-        await registerOnPage(formData);
-
-        await assertPageContainsString('You must fill out all fields');
-        assertPageIsLocatedAtRoute(routes.register);
+        await testRegisterForm(
+            formData,
+            async () => await assertPageContainsString('You must fill out all fields'),
+            () => assertPageIsLocatedAtRoute(routes.register)
+        );
     }, defaultTimeoutTime);
 
     test('User cannot register when the two submitted passwords do not match', async () => {
         const formData = mapDefaultUserToRegisterForm();
         formData.password2 = 'dittokiddo';
 
-        await registerOnPage(formData);
-
-        await assertPageContainsString('Passwords do not match');
-        assertPageIsLocatedAtRoute(routes.register);
+        await testRegisterForm(
+            formData,
+            async () => await assertPageContainsString('Passwords do not match'),
+            () => assertPageIsLocatedAtRoute(routes.register)
+        );
     }, defaultTimeoutTime);
 
     test('User cannot register when the submitted email is not valid', async () => {
         const formData = mapDefaultUserToRegisterForm();
+        formData.username = 'new-user'; // New username
         formData.email = 'broken';
 
-        await registerOnPage(formData);
-
-        await assertPageContainsString('You have to enter a valid email address');
-        assertPageIsLocatedAtRoute(routes.register);
+        await testRegisterForm(
+            formData,
+            async () => await assertPageContainsString('You have to enter a valid email address'),
+            () => assertPageIsLocatedAtRoute(routes.register)
+        );
     }, defaultTimeoutTime);
 });
 
 describe('Test login and logout', () => {
-    beforeAll(async () => { 
-        prepareNewSession();
+    async function testLoginForm(formData, stringAssert, locationAssert) {
+        await loginOnPage(formData);
+        await waitForFormSubmissionToFinish();
 
-        await registerOnPage(mapDefaultUserToRegisterForm());
-        await page.waitForNavigation();
-    });
+        await stringAssert();
+        locationAssert();
+    }
 
     test('User can log in with valid information', async () => {
-        await loginOnPage(mapDefaultUserToLoginForm());
-        await page.waitForNavigation();
-
-        assertPageIsLocatedAtRoute(routes.base);
+        await testLoginForm(
+            mapDefaultUserToLoginForm(),
+            async () => null,
+            () => assertPageIsLocatedAtRoute(routes.base)
+        );
     }, defaultTimeoutTime);
 
     test('User can log out', async () => {
@@ -110,129 +121,136 @@ describe('Test login and logout', () => {
         const formData = mapDefaultUserToLoginForm();
         formData.password = 'wrongpassword';
 
-        await loginOnPage(formData);
-        await page.waitFor(500);
-
-        await assertPageContainsString('That did not work. Try again.');
-        assertPageIsLocatedAtRoute(routes.login);
+        await testLoginForm(
+            formData,
+            async () => await assertPageContainsString('That did not work. Try again.'),
+            () => assertPageIsLocatedAtRoute(routes.login)
+        );
     }, defaultTimeoutTime);
 
     test('User cannot login with invalid username', async () => {
         const formData = mapDefaultUserToLoginForm();
         formData.username = 'user2';
 
-        await loginOnPage(formData);
-
-        await assertPageContainsString('User not found');
-        assertPageIsLocatedAtRoute(routes.login);
+        await testLoginForm(
+            formData,
+            async () => await assertPageContainsString('Unknown user'),
+            () => assertPageIsLocatedAtRoute(routes.login)
+        );
     }, defaultTimeoutTime);
 });
 
 describe('Test message recording', () => {
     beforeAll(async () => {
-        prepareNewSession();
-
-        await registerAndLoginUser(defaultUser);
+        await loginOnPage(mapDefaultUserToLoginForm());
+        await page.waitForNavigation();
     });
 
     test('User can add message', async () => {
-        const message1 = 'test message 1';
-        const message2 = '<test message 2>';
+        const message = 'test message 1';
+        await addMessage(message);
 
-        await addMessage(message1);
-        await addMessage(message2);
-
-        assertPageContainsString(message1);
-        assertPageContainsString(message2);
+        await assertPageContainsString(message);
     }, defaultTimeoutTime);
 });
 
-// TODO: Make compatible with new backend
+describe('Test timelines', () => {
+    const user2 = {
+        username: 'user2',
+        email: 'user@example.com',
+        password: 'default2'
+    };
 
-// describe('Test timelines', () => {
-//     const user2 = {
-//         username: 'user2',
-//         email: 'user@example.com',
-//         password: 'default2'
-//     };
+    const defaultUserMessage = 'the message by default user';
+    const user2Message = 'the message by user 2';
 
-//     const defaultUserMessage = 'the message by default user';
-//     const user2Message = 'the message by user 2';
+    beforeAll(async () => {
+        // Default user logs in and adds a message
+        await loginOnPage(mapDefaultUserToLoginForm());
+        await page.waitForNavigation();
+        await addMessage(defaultUserMessage);
 
-//     beforeAll(async () => {
-//         await prepareNewSession();
+        // User 2 registers, logs in, adds a message, and remains logged in for the rest of the tests
+        await registerAndLoginUser(user2);
+        await addMessage(user2Message);
+    }, defaultTimeoutTime);
 
-//         // Default user registers, logs in, adds a message, and logs out
-//         await registerAndLoginUser(defaultUser);
-//         await page.goto(routes.base, { waitUntil: 'domcontentloaded' });
-//         await addMessage(defaultUserMessage);
-//         await page.goto(routes.logout, { waitUntil: 'domcontentloaded' });
+    test('Added messages in visible on public timeline', async () => {
+        await page.goto(routes.public, { waitUntil: 'networkidle0' });
 
-//         // User 2 registers, logs in, adds a message, and remains logged in
-//         await registerAndLoginUser(user2);
-//         await page.goto(routes.base, { waitUntil: 'domcontentloaded' });
-//         await addMessage(user2Message);
-//     }, defaultTimeoutTime);
+        await assertPageContainsString(defaultUserMessage);
+        await assertPageContainsString(user2Message);
+    }, defaultTimeoutTime);
 
-//     test('Added messages in visible on public timeline', async () => {
-//         await page.goto(routes.public, { waitUntil: 'domcontentloaded' });
+    test('User 2\'s timeline should only show user 2\'s message', async () => {
+        await page.goto(routes.profile(user2.username), { waitUntil: 'networkidle0' });
 
-//         await assertPageContainsString(defaultUserMessage);
-//         await assertPageContainsString(user2Message);
-//     }, defaultTimeoutTime);
+        await assertPageContainsString(user2Message);
+        await assertPageDoesNotContainString(defaultUserMessage);
+    }, defaultTimeoutTime);
 
-//     test('User 2\'s timeline should only show user 2\'s message', async () => {
-//         await page.goto(routes.base, { waitUntil: 'domcontentloaded' });
+    test('Default user\'s message is on user 2\'s timeline after follow', async () => {
+        // Go to default's user profile via the public timeline
+        await loginOnPage(mapUserToLoginForm(user2));
+        await page.waitForNavigation({ waitUntil: "networkidle0" });
+        await page.$eval(`a[href="/public"]`, async (el) => await el.click());
+        await page.waitForSelector(`a[href="/${defaultUser.username}"]`);
+        await page.$eval(`a[href="/${defaultUser.username}"]`, async (el) => await el.click());
 
-//         await assertPageContainsString(user2Message);
-//         await assertPageDoesNotContainString(defaultUserMessage);
-//     }, defaultTimeoutTime);
+        // Follow profile
+        await page.waitForSelector('.followstatus');
+        await page.$eval('.followstatus button', async (el) => await el.click());
+        await page.waitFor(500);
 
-//     test('Default user\'s message is on user 2\'s timeline after follow', async () => {
-//         // Go to default's user profile and follow profile
-//         await page.goto(routes.profile(defaultUser.username), { waitUntil: 'domcontentloaded' });
-//         await page.waitForSelector('.followstatus');
-//         await page.$eval('a.follow', async (el) => await el.click());
+        await assertPageContainsString('You are currently following this user');
 
-//         await assertPageContainsString(`You are now following "${defaultUser.username}"`);
+        // Go to user 2's "my timeline" and assert the default user's messages is shown on the timeline
+        await page.$eval(`a[href="/"]`, async (el) => await el.click());
+        await page.waitForSelector(`a[href="/${defaultUser.username}"]`);
 
-//         // Go to public timeline and assert
-//         await page.goto(routes.base, { waitUntil: 'domcontentloaded' });
-//         await assertPageContainsString(user2Message);
-//         await assertPageContainsString(defaultUserMessage);
-//     }, defaultTimeoutTime);
+        await assertPageContainsString(defaultUserMessage);
+    }, defaultTimeoutTime);
 
-//     test('Profile timelines only contain user\'s message', async () => {
-//         // Go to default user's profile and assert only his/hers message is there as the only one
-//         await page.goto(routes.profile(defaultUser.username), { waitUntil: 'domcontentloaded' });
-//         await assertPageContainsString(defaultUserMessage);
-//         await assertPageDoesNotContainString(user2Message);
+    test('Profile timelines only contain user\'s message', async () => {
+        // Go to default user's profile and assert only his/hers message is there as the only one
+        await page.goto(routes.profile(defaultUser.username), { waitUntil: 'networkidle0' });
+        
+        await assertPageContainsString(defaultUserMessage);
+        await assertPageDoesNotContainString(user2Message);
 
-//         // Go to user 2's profile and assert only his/hers message is there as the only one
-//         await page.goto(routes.profile(user2.username), { waitUntil: 'domcontentloaded' });
-//         await assertPageContainsString(user2Message);
-//         await assertPageDoesNotContainString(defaultUserMessage);
-//     }, defaultTimeoutTime);
+        // Go to user 2's profile and assert only his/hers message is there as the only one
+        await page.goto(routes.profile(user2.username), { waitUntil: 'networkidle0' });
+        
+        await assertPageContainsString(user2Message);
+        await assertPageDoesNotContainString(defaultUserMessage);
+    }, defaultTimeoutTime);
 
-//     test('Default user\'s message is not on user 2\'s timeline after unfollow', async () => {
-//         // Go to default's user profile and unfollow profile
-//         await page.goto(routes.profile(defaultUser.username), { waitUntil: 'domcontentloaded' });
-//         await page.waitForSelector('.followstatus');
-//         await page.$eval('a.unfollow', async (el) => await el.click());
+    test('Default user\'s message is not on user 2\'s timeline after unfollow', async () => {
+        // Go to default's user profile via the public timeline
+        await loginOnPage(mapUserToLoginForm(user2));
+        await page.waitForNavigation({ waitUntil: "networkidle0" });
+        await page.$eval(`a[href="/public"]`, async (el) => await el.click());
+        await page.waitForSelector(`a[href="/${defaultUser.username}"]`);
+        await page.$eval(`a[href="/${defaultUser.username}"]`, async (el) => await el.click());
 
-//         await assertPageContainsString(`You are no longer following "${defaultUser.username}"`);
+        // Unfollow profile
+        await page.waitForSelector('.followstatus');
+        await page.$eval('.followstatus button', async (el) => await el.click());
+        await page.waitFor(500);
 
-//         await page.goto(routes.base, { waitUntil: 'domcontentloaded' });
-//         await assertPageContainsString(user2Message);
-//         await assertPageDoesNotContainString(defaultUserMessage);
-//     }, defaultTimeoutTime);
-// });
- 
+        await assertPageContainsString('You are not yet following this user');
+
+        // Go to user 2's "my timeline" and assert the default user's messages is NOT shown on the timeline
+        await page.$eval(`a[href="/"]`, async (el) => await el.click());
+        await page.waitForSelector(`a[href="/${user2.username}"]`);
+
+        await assertPageDoesNotContainString(defaultUserMessage);
+    }, defaultTimeoutTime);
+});
+
 afterAll(async () => {
     await page.close();
     await browser.close();
-    
-    stopApp();
 });
 
 
@@ -339,8 +357,6 @@ async function addMessage(message) {
  * @param expectedStr Expected string to be present in HTML
  */
 async function assertPageContainsString(expectedStr) {
-    await page.waitFor('div.body');
-
     const html = await page.evaluate(() => document.body.innerHTML, { waitUntil: 'domcontentloaded' });
 
     expect(html.includes(expectedStr)).toBe(true);
@@ -353,8 +369,6 @@ async function assertPageContainsString(expectedStr) {
  * @param expectedStr Expected string to be present in HTML
  */
 async function assertPageDoesNotContainString(expectedStr) {
-    await page.waitFor('div.body');
-
     const html = await page.evaluate(() => document.body.innerHTML, { waitUntil: 'domcontentloaded' });
 
     expect(html.includes(expectedStr)).toBe(false);
@@ -370,35 +384,13 @@ function assertPageIsLocatedAtRoute(route) {
     expect(page.url()).toBe(route);
 }
 
-
-//// TEST SUITE UTILS ////
-
 /**
- * Prepares new user session to be included in test.
+ * Wait until the network form submission API call has been completed 
  */
-async function prepareNewSession() {
-    resetDb();
-
-    await page.goto(routes.logout, { waitUntil: 'domcontentloaded' });
-}
-
-/**
- * Function to start REST API
- */
-function startApp() {
-    exec('../minitwit-backend/control.sh start');
-}
-
-/**
- * Function to stop REST API
- */
-function stopApp() {
-    exec('../minitwit-backend/control.sh stop');
-}
-
-/**
- * Function to wipe SQLite DB and initialize it with no data
- */
-function resetDb() {
-    exec('rm -rf /tmp/minitwit.db && ../minitwit-backend/control.sh init');
+async function waitForFormSubmissionToFinish() {
+    // Whatever finishes first
+    await Promise.race([
+        page.waitForSelector("div.error"),                    // Error shown on screen
+        page.waitForNavigation({ waitUntil: "networkidle0" }) // API call done
+    ]);
 }

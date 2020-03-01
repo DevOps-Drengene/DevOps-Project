@@ -1,4 +1,4 @@
-name: Scheduled simulator-test on prod
+name: Scheduled Check
 
 on:
   schedule:

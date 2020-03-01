@@ -1,5 +1,7 @@
 # DevOps-Project
 
+![Deployment Completed](https://github.com/DevOps-Drengene/DevOps-Project/workflows/Deployment/badge.svg) ![Scheduled server check](https://github.com/DevOps-Drengene/DevOps-Project/workflows/Scheduled%20Check/badge.svg)
+
 ## Setup and run
 1. Build application:
     ```bash

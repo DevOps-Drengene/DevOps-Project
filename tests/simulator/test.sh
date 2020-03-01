@@ -1,5 +1,5 @@
 #!/bin/bash
-errors=$(python minitwit_simulator.py http://simulator-api:5001)
+errors=$(python minitwit_simulator.py http://simulator-api:5001 minitwit_scenario_min.csv)
 
 if [ -z "$errors" ]; then
     echo "SUCCESS! No errors detected."

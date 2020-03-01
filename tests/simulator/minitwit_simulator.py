@@ -19,7 +19,6 @@ from contextlib import closing
 import sqlite3
 
 
-CSV_FILENAME = "./minitwit_scenario_min.csv"
 USERNAME = "simulator"
 PWD = "super_safe!"
 CREDENTIALS = ":".join([USERNAME, PWD]).encode("ascii")
@@ -349,5 +348,6 @@ def main(host):
 
 if __name__ == "__main__":
     host = sys.argv[1]
+    CSV_FILENAME = sys.argv[2]
 
     main(host)

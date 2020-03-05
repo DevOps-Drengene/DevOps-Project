@@ -2,10 +2,12 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "es6": true
+        "es6": true,
+        "testdouble/testdouble": true
     },
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "plugin:jest/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -15,5 +17,13 @@
         "ecmaVersion": 2018
     },
     "rules": {
-    }
+        "jest/no-disabled-tests": "warn",
+        "jest/no-focused-tests": "error",
+        "jest/no-identical-title": "error",
+        "jest/prefer-to-have-length": "warn",
+        "jest/valid-expect": "error",
+        "jest/no-test-callback": 0,
+        "testdouble/object-creation": [ "error", "plain" ]
+    },
+    "plugins": ["jest", "testdouble"]
 }

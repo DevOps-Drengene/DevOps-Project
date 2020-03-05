@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const db = require('./db');
+const db = require('./config/db');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));

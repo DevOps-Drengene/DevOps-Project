@@ -4,7 +4,7 @@ process.env.PSQL_DB_USER_PASSWORD = 'docker';
 process.env.PSQL_HOST_NAME = 'db';
 
 const yargs = require('yargs');
-const db = require('./src/db');
+const db = require('./src/config/db');
 
 // eslint-disable-next-line no-unused-expressions
 yargs

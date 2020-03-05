@@ -17,12 +17,11 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = require('./models/user.js')(sequelize, Sequelize);
-db.message = require('./models/message.js')(sequelize, Sequelize);
+db.user = require('../models/user.js')(sequelize, Sequelize);
+db.message = require('../models/message.js')(sequelize, Sequelize);
 
 db.user.hasMany(db.message);
 db.message.belongsTo(db.user);
 db.user.belongsToMany(db.user, { as: 'Follow', through: 'followers' });
-
 
 module.exports = db;

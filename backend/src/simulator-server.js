@@ -6,8 +6,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const port = process.env.PORT || 5001;
-
 let latest = 0;
 
 function updateLatest(req) {
@@ -55,8 +53,4 @@ app.use('/fllws', follows);
 
 app.get('/latest', (req, res) => res.send({ latest }));
 
-const server = app.listen(port, () => {
-  console.log(`Server started on port: ${port}`);
-});
-
-module.exports = { app, server };
+module.exports = app;

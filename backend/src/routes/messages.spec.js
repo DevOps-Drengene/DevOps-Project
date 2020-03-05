@@ -6,22 +6,16 @@ const request = require('supertest');
 let UserRepository;
 let MessageRepository;
 let app;
-let server;
 
 describe('/msgs', () => {
   beforeEach(() => {
     UserRepository = td.replace('../repositories/UserRepository');
     MessageRepository = td.replace('../repositories/MessageRepository');
-    app = require('../minitwit-api').app;
-    server = require('../minitwit-api').server;
+    app = require('../simulator-server');
   });
 
   afterEach(() => {
     td.reset();
-  });
-
-  afterAll(() => {
-    server.close();
   });
 
   it('GET / returns list of messages if OK', (done) => {

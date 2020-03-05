@@ -5,21 +5,15 @@ const request = require('supertest');
 
 let UserRepository;
 let app;
-let server;
 
 describe('/register', () => {
   beforeEach(() => {
     UserRepository = td.replace('../repositories/UserRepository');
-    app = require('../minitwit-api').app;
-    server = require('../minitwit-api').server;
+    app = require('../simulator-server');
   });
 
   afterEach(() => {
     td.reset();
-  });
-
-  afterAll(() => {
-    server.close();
   });
 
   it('returns 204 if OK', (done) => {

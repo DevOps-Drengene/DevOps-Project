@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/web-api.js",
-    "simulator": "node src/minitwit-api.js",
+    "start": "node src/index.custom-api.js",
+    "simulator": "node src/index.simulator-api.js",
     "lint": "eslint .",
     "test": "jest --runInBand"
   },

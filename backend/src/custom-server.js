@@ -9,8 +9,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-const port = process.env.PORT || 5001;
-
 app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
@@ -209,8 +207,4 @@ app.post('/add_message', async (req, res) => {
   }
 });
 
-db.sequelize.sync().then(async () => {
-  app.listen(port, () => {
-    console.log(`Server started on port: ${port}`);
-  });
-});
+module.exports = app;

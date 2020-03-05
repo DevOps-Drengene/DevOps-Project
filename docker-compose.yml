@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 
 networks:
     main:
@@ -24,14 +24,15 @@ services:
             - main
         ports:
             - "5001:5001"
-        command: npm run simulator
+        command: bash -c "/wait && npm run simulator"
         depends_on:
             - db
         environment:
-            - PSQL_DB_NAME=minitwit         # Must be the same as 'POSTGRES_DB' in 'db' service
-            - PSQL_DB_USER_NAME=docker      # Must be the same as 'POSTGRES_USER' in 'db' service
-            - PSQL_DB_USER_PASSWORD=docker  # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
-            - PSQL_HOST_NAME=db             # Must be the same as the name of the 'db' service
+            - PSQL_DB_NAME=minitwit # Must be the same as 'POSTGRES_DB' in 'db' service
+            - PSQL_DB_USER_NAME=docker # Must be the same as 'POSTGRES_USER' in 'db' service
+            - PSQL_DB_USER_PASSWORD=docker # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
+            - PSQL_HOST_NAME=db # Must be the same as the name of the 'db' service
+            - WAIT_HOSTS=db:5432
 
     custom-api:
         build: ./backend
@@ -39,14 +40,15 @@ services:
             - main
         ports:
             - "5000:5001"
-        command: npm start
+        command: bash -c "/wait && npm start"
         depends_on:
             - db
         environment:
-            - PSQL_DB_NAME=minitwit         # Must be the same as 'POSTGRES_DB' in 'db' service
-            - PSQL_DB_USER_NAME=docker      # Must be the same as 'POSTGRES_USER' in 'db' service
-            - PSQL_DB_USER_PASSWORD=docker  # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
-            - PSQL_HOST_NAME=db             # Must be the same as the name of the 'db' service
+            - PSQL_DB_NAME=minitwit # Must be the same as 'POSTGRES_DB' in 'db' service
+            - PSQL_DB_USER_NAME=docker # Must be the same as 'POSTGRES_USER' in 'db' service
+            - PSQL_DB_USER_PASSWORD=docker # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
+            - PSQL_HOST_NAME=db # Must be the same as the name of the 'db' service
+            - WAIT_HOSTS=db:5432
 
     frontend:
         build: ./frontend

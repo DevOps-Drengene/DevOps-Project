@@ -5,21 +5,15 @@ const request = require('supertest');
 
 let UserRepository;
 let app;
-let server;
 
 describe('/fllws', () => {
   beforeEach(() => {
     UserRepository = td.replace('../repositories/UserRepository');
-    app = require('../minitwit-api').app;
-    server = require('../minitwit-api').server;
+    app = require('../simulator-server');
   });
 
   afterEach(() => {
     td.reset();
-  });
-
-  afterAll(() => {
-    server.close();
   });
 
   it('GET /:username returns the people the user is following if OK', (done) => {

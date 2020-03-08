@@ -2,15 +2,10 @@
 
 This document summarizes how work is organized and structured using Git to lay out the common guidelines for contributions to this project.
 
-## The project's structure in repositories
+## The project's repository setup
 
-The project is split up in two distributed repositories – one for the frontend and backend part of the application. This is done to completely separate the two subsystems from each other, and let the repositories be managed by their own version control setup to control releases and such independently.
-These repositories are added as submodules to [this "main" repository](https://github.com/DevOps-Drengene/DevOps-Project) that controls the primary releases of the project.
-
-The repositories, hosted on GitHub, support an intended centralized workflow in which each one of them acts as a shared repository that all contributors contribute their work to.
-
-Link to frontend repository: https://github.com/DevOps-Drengene/minitwit-react-frontend
-Link to backend repository: https://github.com/DevOps-Drengene/minitwit-backend
+The whole project is gathered in this mono repository with both the frontend and backend part of the application, as well as all tests. This is done to have the whole application versioned as one large package, and enables it to be deployed as a single unit. 
+The repository, hosted here on GitHub, support an intended centralized workflow in which it acts as a shared repository that all contributors contribute their work to.
 
 ## Integrating contributions
 
@@ -22,11 +17,36 @@ Thus, all contributions must be submitted as a pull request into the master bran
 The whole project team is responsible for integrating and reviewing the submitted pull requests.
 As a general rule, <u>one</u> team member with the required knowledge to review the changes within the specific subsystem is required to review the pull request, and if approved, merge the changes. Without this approval, the changes cannot be merged.
 
+
+**Auto releases**  
+Whenever an approved PR is merged to master, and the changes has passed the CI/CD pipeline and thus deployed to the production server, then the latest commit on master will be tagged with the latest version number and a GitHub release will be created.
+To support correct version-numbering, it is important that the title of the PR-merge commit contains a *version-tag* that will determine what part of the version that will be incremented (i.e. major, minor, and patch).  
+A general guideline is listed below.
+
+* Major:
+  * Version-tag: `#major`.
+  * Example of PR-merge commit title: `Change REST API to V2 #major`.
+  * Requirement for use of tag:
+    * API changes.
+    * Versions that are incompatible with other versions.
+* Minor:
+  * Version-tag: `#minor`.
+  * Example of PR-merge commit title: `Implemented tweet-flagging feature #minor`.
+  * Requirement for use of tag:
+    * New features/functionality.
+* Patch:
+  * Version-tag: `#patch`.
+  * Example of PR-merge commit title: `Optimized calls to DB #patch`.
+  * Requirement for use of tag:
+    * Bug fixes.
+    * Refactoring.
+    * Small code changes.
+
 ## The branching and commit model
 
 **Branches**
 
-The repositories follow a topic-based branching model, which means that branches are short-lived and created for a particular feature, bugfix, or other related work.
+The repository follow a topic-based branching model, which means that branches are short-lived and created for a particular feature, bugfix, or other related work.
 The topic is based on a GitHub issue that describes what needs to be done – i.e. "write simulator endpoint". Thus, a branch to implement this change is created, and these changes are local to this one feature.
 
 **Commits**

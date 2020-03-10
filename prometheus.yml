@@ -18,3 +18,8 @@ scrape_configs:
       - targets: ["simulator-api:5001"]
         labels:
           group: "production"
+  - job_name: "node-exporter"
+    static_configs:
+      - targets: ["node-exporter:9100"]
+        labels:
+          group: "production"

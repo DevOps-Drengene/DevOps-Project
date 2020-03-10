@@ -58,6 +58,23 @@ services:
             - "3000:3000"
         depends_on:
             - custom-api
+    
+    # From: https://github.com/stefanprodan/dockprom/blob/master/docker-compose.yml
+    node-exporter:
+        image: prom/node-exporter
+        volumes:
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /:/rootfs:ro
+        command:
+            - '--path.procfs=/host/proc'
+            - '--path.rootfs=/rootfs'
+            - '--path.sysfs=/host/sys'
+            - '--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($$|/)'
+        ports:
+            - "9100:9100"
+        networks:
+            - main
 
     prometheus:
         image: prom/prometheus
@@ -70,6 +87,7 @@ services:
         depends_on:
             - simulator-api
             - custom-api
+            - node-exporter
 
     grafana:
         build: ./grafana

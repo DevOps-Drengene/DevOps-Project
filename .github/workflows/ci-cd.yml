@@ -17,7 +17,7 @@ jobs:
           cd backend
           npm install
           ./node_modules/.bin/eslint .
-                               
+
   eslint-frontend:
     name: ESLint (Frontend)
     runs-on: ubuntu-latest
@@ -27,6 +27,16 @@ jobs:
           cd frontend
           npm install --no-optional # --no-optional flag is set to fix this error: https://bit.ly/2VmFFcm
           ./node_modules/.bin/eslint .
+
+  test-backend:
+    name: Unit tests (Backend)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd backend
+          npm install
+          npm test
 
   integration-tests:
     name: Integration tests
@@ -95,7 +105,7 @@ jobs:
         KEY: ${{ secrets.CI_private_key }}
         script: |
           cd /vagrant/
-          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull 
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull
           docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
     - name: Bump version and push tag

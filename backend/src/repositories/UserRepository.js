@@ -5,6 +5,10 @@ module.exports = {
     return db.user.findOne({ where: { username } });
   },
 
+  async getById(id) {
+    return db.user.findByPk(id);
+  },
+
   async create(username, email, password) {
     return db.user.create({ username, email, password });
   },
@@ -19,5 +23,13 @@ module.exports = {
 
   async getFollowing(user, limit) {
     return user.getFollow({ limit });
+  },
+
+  async numberOfUsers() {
+    return db.user.count();
+  },
+
+  async isFollowing(follower, followed) {
+    return follower.hasFollow(followed);
   },
 };

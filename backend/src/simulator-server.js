@@ -1,18 +1,29 @@
 /* eslint-disable no-console */
 const express = require('express');
 const bodyParser = require('body-parser');
+const promClient = require('prom-client');
+const userRepository = require('./repositories/UserRepository');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /** BEGIN: Sample Prometheus setup */
-const promClient = require('prom-client');
 
 // Sample 'latest' counter
 const sampleCounter = new promClient.Counter({
   name: 'minitwit_simulator_sample_counter',
   help: 'Sample counter for simulator of Minitwit',
+});
+
+const errorsCounter = new promClient.Counter({
+  name: 'minitwit_simulator_errors_counter',
+  help: 'The amount of errors sent to clients',
+});
+
+const usersCounter = new promClient.Gauge({
+  name: 'minitwit_simulator_users_count',
+  help: 'Number of users registered in minitwit simulator',
 });
 
 // Default metrics
@@ -29,6 +40,8 @@ function updateLatest(req) {
 }
 
 function handleError(err, res) {
+  errorsCounter.inc();
+
   if (err.message.toLowerCase().includes('bad request')) {
     console.log(err);
     console.log('--> sent 400');
@@ -71,7 +84,10 @@ app.get('/latest', (_req, res) => {
 });
 
 // Route for Prometheus setup
-app.get('/metrics', (_req, res) => {
+app.get('/metrics', async (_req, res) => {
+  try {
+    usersCounter.set(await userRepository.numberOfUsers());
+  } catch (err) { console.log(err); }
   res.set('Content-Type', promClient.register.contentType);
   res.end(promClient.register.metrics());
 });

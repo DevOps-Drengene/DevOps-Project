@@ -1,5 +1,16 @@
 const express = require('express');
+const promClient = require('prom-client');
 const UserRepository = require('../repositories/UserRepository');
+
+const getUsernameCounter = new promClient.Counter({
+  name: 'minitwit_simulator_get_fllws_username_calls',
+  help: 'The total number of GET /fllws/:username calls made',
+});
+
+const postUsernameCounter = new promClient.Counter({
+  name: 'minitwit_simulator_post_fllws_username_calls',
+  help: 'The total number of POST /fllws/:username calls made',
+});
 
 module.exports = (updateLatest, notReqFromSimulator, handleError) => {
   const router = express.Router();
@@ -11,6 +22,7 @@ module.exports = (updateLatest, notReqFromSimulator, handleError) => {
   }
 
   router.get('/:username', async (req, res) => {
+    getUsernameCounter.inc();
     try {
       updateLatest(req);
       notReqFromSimulator(req, res);
@@ -28,6 +40,7 @@ module.exports = (updateLatest, notReqFromSimulator, handleError) => {
   });
 
   router.post('/:username', async (req, res) => {
+    postUsernameCounter.inc();
     try {
       updateLatest(req);
       notReqFromSimulator(req, res);

@@ -2,7 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const db = require('./config/db');
+const messageRepository = require('./repositories/MessageRepository');
+const userRepository = require('./repositories/UserRepository');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -13,13 +14,13 @@ app.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    if (await db.user.findOne({ where: { username } })) return res.status(400).send({ error: 'The username is already taken' });
+    if (await userRepository.getByUsername(username)) return res.status(400).send({ error: 'The username is already taken' });
 
-    await db.user.create({ username, email, password });
+    await userRepository.create(username, email, password);
 
     return res.status(204).send();
   } catch (err) {
-    return res.status(400).send({ error: err.message });
+    return res.status(500).send({ error: err.message });
   }
 });
 
@@ -27,7 +28,7 @@ app.post('/login', async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await db.user.findOne({ where: { username } });
+    const user = await userRepository.getByUsername(username);
     if (!user) return res.status(400).send({ error: 'Unknown user' });
 
     const match = await bcrypt.compare(password, user.password);
@@ -44,48 +45,20 @@ app.get('/public', async (req, res) => {
   try {
     const { numMessages = 50 } = req.body;
 
-    const messages = await db.message.findAll({
-      where: { flagged: false },
-      order: [['createdAt', 'DESC']],
-      limit: numMessages,
-      include: [db.user],
-    });
+    const messages = await messageRepository.getAll(numMessages, true);
 
-    return res.send(messages.map((msg) => ({
-      text: msg.text,
-      pubDate: msg.createdAt,
-      userId: msg.user.id,
-      username: msg.user.username,
-      email: msg.user.email,
-    })));
+    return res.send(messages);
   } catch (err) {
     return res.status(500).send(err.message);
   }
 });
 
 async function getTimeline(userId, numMessages) {
-  const user = await db.user.findByPk(userId);
+  const user = await userRepository.getById(userId);
 
-  const messages = await db.message.findAll({
-    where: {
-      flagged: false,
-      [db.Sequelize.Op.or]: [
-        { userId: await user.getFollow().map((flw) => flw.id) },
-        { userId: user.id },
-      ],
-    },
-    limit: numMessages,
-    include: [db.user],
-    order: [['createdAt', 'DESC']],
-  });
+  const messages = await messageRepository.getTimeline(user, numMessages);
 
-  return (messages.map((msg) => ({
-    text: msg.text,
-    pubDate: msg.createdAt,
-    userId: msg.user.id,
-    username: msg.user.username,
-    email: msg.user.email,
-  })));
+  return messages;
 }
 
 app.get('/timeline/:userId', async (req, res) => {
@@ -107,21 +80,17 @@ app.get('/user/:username/:currentUserId?', async (req, res) => {
     const { username, currentUserId } = req.params;
     const { numMessages = 50 } = req.body;
 
-    const profileUser = await db.user.findOne({ where: { username } });
+    const profileUser = await userRepository.getByUsername(username);
 
     if (!profileUser) return res.status(404).send({ error: 'User not found' });
 
     let following = false;
     if (currentUserId) {
-      const currentUser = await db.user.findByPk(currentUserId);
-      const followingRes = await currentUser.getFollow({ where: { id: profileUser.id } });
-      following = !!(followingRes.length);
+      const currentUser = await userRepository.getById(currentUserId);
+      following = await userRepository.isFollowing(currentUser, profileUser);
     }
 
-    const messages = await profileUser.getMessages({
-      order: [['createdAt', 'DESC']],
-      limit: numMessages,
-    });
+    const messages = await messageRepository.getMessagesByUser(profileUser, numMessages);
 
     return res.send({
       profileUser: {
@@ -152,13 +121,13 @@ app.post('/:username/follow', async (req, res) => {
 
     if (!currentUserId) return res.status(401).send({ error: 'currentUserId is missing' });
 
-    const follower = await db.user.findByPk(currentUserId);
+    const follower = await userRepository.getById(currentUserId);
 
-    const followed = await db.user.findOne({ where: { username } });
+    const followed = await userRepository.getByUsername(username);
 
     if (!follower || !followed) return res.status(404).send({ error: 'User not found' });
 
-    await follower.addFollow(followed);
+    await userRepository.addFollow(follower, followed);
 
     return res.status(204).send();
   } catch (err) {
@@ -173,13 +142,13 @@ app.post('/:username/unfollow', async (req, res) => {
 
     if (!currentUserId) return res.status(401).send({ error: 'currentUserId is missing' });
 
-    const follower = await db.user.findByPk(currentUserId);
+    const follower = await userRepository.getById(currentUserId);
 
-    const followed = await db.user.findOne({ where: { username } });
+    const followed = await userRepository.getByUsername(username);
 
     if (!follower || !followed) return res.status(404).send({ error: 'User not found' });
 
-    await follower.removeFollow(followed);
+    await userRepository.removeFollow(follower, followed);
 
     return res.status(204).send();
   } catch (err) {
@@ -193,13 +162,13 @@ app.post('/add_message', async (req, res) => {
 
     if (!currentUserId) return res.status(401).send({ error: 'currentUserId is missing' });
 
-    const user = await db.user.findByPk(currentUserId);
+    const user = await userRepository.getById(currentUserId);
 
-    if (!user) throw new Error('User not found');
+    if (!user) res.status(404).send({ error: 'User not found' });
 
-    await user.createMessage({ text: newMessage });
+    await messageRepository.create(user, newMessage);
 
-    const messages = await getTimeline(currentUserId);
+    const messages = await getTimeline(currentUserId, 50);
 
     return res.status(201).send(messages);
   } catch (err) {

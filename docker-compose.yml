@@ -58,3 +58,24 @@ services:
             - "3000:3000"
         depends_on:
             - custom-api
+
+    prometheus:
+        image: prom/prometheus
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+        ports:
+            - "9090:9090"
+        networks:
+            - main
+        depends_on:
+            - simulator-api
+            - custom-api
+
+    grafana:
+        build: ./grafana
+        ports:
+            - "3001:3000"
+        networks:
+            - main
+        depends_on:
+            - prometheus

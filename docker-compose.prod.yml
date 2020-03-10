@@ -1,19 +1,25 @@
-version: '3.5'
+version: "3.5"
 
 services:
   db:
     volumes:
       - /mnt/prod-db-volume/docker/volumes/minitwit/postgres-data:/var/lib/postgresql/data
-  
+
   simulator-api:
     image: dagandersen/backend
     # Manual hack: wait for DB to be ready, and then start container
     command: /bin/sh -c 'while ! nc -z db 5432; do sleep 5; done; npm run simulator'
-  
+
   custom-api:
     image: dagandersen/backend
     # Manual hack: wait for DB to be ready, and then start container
     command: /bin/sh -c 'while ! nc -z db 5432; do sleep 5; done; npm start'
-  
+
   frontend:
     image: dagandersen/frontend
+
+  grafana:
+    image: dagandersen/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=Helge&Friends
+      - GF_SECURITY_ADMIN_PASSWORD=uiUIui # Super safe

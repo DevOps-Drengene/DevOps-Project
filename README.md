@@ -15,6 +15,11 @@
     - Frontend: `localhost:3000`
     - Custom API: `localhost:5000`
     - Simulator API: `localhost:5001`
+    - Grafana: `localhost:3001`
+
+Grafana admin credentials (in non-prod mode):
+- Username: `admin`
+- Password: `admin`
 
 ## Deploy and run with Vagrant on Digital Ocean
 1. Add `SSH_KEY_NAME` and `DIGITAL_OCEAN_TOKEN` to your environment.

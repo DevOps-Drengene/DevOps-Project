@@ -6,6 +6,20 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/** BEGIN: Sample Prometheus setup */
+const promClient = require('prom-client');
+
+// Sample 'latest' counter
+const sampleCounter = new promClient.Counter({
+  name: 'minitwit_simulator_sample_counter',
+  help: 'Sample counter for simulator of Minitwit',
+});
+
+// Default metrics
+const { collectDefaultMetrics } = promClient;
+collectDefaultMetrics();
+/** END: Sample Prometheus setup */
+
 let latest = 0;
 
 function updateLatest(req) {
@@ -51,6 +65,15 @@ app.use('', authenticate);
 app.use('/msgs', messages);
 app.use('/fllws', follows);
 
-app.get('/latest', (req, res) => res.send({ latest }));
+app.get('/latest', (_req, res) => {
+  sampleCounter.inc();
+  res.send({ latest });
+});
+
+// Route for Prometheus setup
+app.get('/metrics', (_req, res) => {
+  res.set('Content-Type', promClient.register.contentType);
+  res.end(promClient.register.metrics());
+});
 
 module.exports = app;

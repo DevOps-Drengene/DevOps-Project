@@ -33,26 +33,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
+      - uses: actions/checkout@v1
+      - name: 
         uses: actions/setup-node@v1
         with:
           node-version: 12
-
-      # ESLint and Prettier must be in `package.json`
-      - name: Install Node.js dependencies
-        run: npm install
-
-      - name: Run linters
-        uses: samuelmeuli/lint-action@master
+      - name: generate benchmarks
+        run: |
+          cd backend
+          npm install
+          ./node_modules/.bin/eslint --fix .
+      - name: push
+        uses: github-actions-x/commit@v2.3
         with:
-          github_token: ${{ secrets.github_token }}
-          eslint: true
-          eslint_dir: backend/
-          auto_fix: true
-          commit_message: "Fix code style issues with ${linter}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Auto Lint Fix'
+          rebase: 'true' # pull abd rebase before commit
 
   test-backend:
     name: Unit tests (Backend)

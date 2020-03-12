@@ -50,13 +50,12 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git pull
         git commit -m "Add changes" -a
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: $ {{ steps.extract_branch.outputs.branch }}
+        branch: ${{ steps.extract_branch.outputs.branch }}
   
   test-backend:
     name: Unit tests (Backend)

@@ -36,7 +36,8 @@ jobs:
       run: |
         cd frontend
         npm install --no-optional # --no-optional flag is set to fix this error: https://bit.ly/2VmFFcm
-        ./node_modules/.bin/eslint .
+        ./node_modules/.bin/eslint --fix .
+        touch test.txt
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"

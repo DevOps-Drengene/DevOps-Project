@@ -29,27 +29,24 @@ jobs:
           ./node_modules/.bin/eslint .
 
   auto-lint-fixer:
-    name: Run linters
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v1
-      - name: 
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - name: generate benchmarks
-        run: |
-          cd backend
-          npm install
-          ./node_modules/.bin/eslint --fix .
-      - name: push
-        uses: github-actions-x/commit@v2.3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Auto Lint Fix'
-          rebase: 'true' # pull abd rebase before commit
-
+    - uses: actions/checkout@master
+    - name: Create local changes
+      run: |
+        cd frontend
+        npm install --no-optional # --no-optional flag is set to fix this error: https://bit.ly/2VmFFcm
+        ./node_modules/.bin/eslint .
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -m "Add changes" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+  
   test-backend:
     name: Unit tests (Backend)
     runs-on: ubuntu-latest

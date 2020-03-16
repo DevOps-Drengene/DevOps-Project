@@ -3,7 +3,8 @@
     "docker engine": "^19.03.7",
     "docker-compose": "^1.25.4",
     "vagrant": "^2.2.7",
-    "vagrant-digitalocean": "^0.9.3"
+    "vagrant-digitalocean": "^0.9.3",
+    "make": "^3.81"
   },
   "frontEnd": {
     "runTime": {

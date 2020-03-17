@@ -15,6 +15,7 @@
     - Frontend: `localhost:3000`
     - Custom API: `localhost:5000`
     - Simulator API: `localhost:5001`
+    - Simulator API Swagger docs: `localhost:5001/api-docs`
     - Prometheus API: `localhost:9090`
     - Grafana: `localhost:3001`
 

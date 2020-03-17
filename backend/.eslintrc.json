@@ -23,7 +23,8 @@
         "jest/prefer-to-have-length": "warn",
         "jest/valid-expect": "error",
         "jest/no-test-callback": 0,
-        "testdouble/object-creation": [ "error", "plain" ]
+        "testdouble/object-creation": [ "error", "plain" ],
+        "linebreak-style": 0
     },
     "plugins": ["jest", "testdouble"]
 }

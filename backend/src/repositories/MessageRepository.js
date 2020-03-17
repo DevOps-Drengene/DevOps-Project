@@ -1,11 +1,8 @@
 const db = require('../config/db');
+const Message = require('../dtos/message');
 
 function formatMessages(messages) {
-  return messages.map((msg) => ({
-    content: msg.text,
-    pub_date: msg.createdAt,
-    user: msg.user.username,
-  }));
+  return messages.map((msg) => new Message(msg.text, msg.createdAt, msg.user.username));
 }
 
 function formatMessages2(messages) {

@@ -18,6 +18,10 @@ services:
   frontend:
     image: dagandersen/frontend
 
+  prometheus:
+    volumes:
+      - /mnt/prod-db-volume/docker/volumes/minitwit/prometheus-data:/prometheus
+
   grafana:
     image: dagandersen/grafana
     environment:

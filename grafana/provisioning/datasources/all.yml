@@ -1,9 +1,27 @@
+# config file version
+apiVersion: 1
+
 datasources:
-  - access: "proxy"
-    editable: true
-    is_default: true
-    name: "Minitwit Prometheus"
-    org_id: 1
+  - name: "Minitwit Prometheus"
     type: "prometheus"
     url: "http://prometheus:9090"
+    access: "proxy"
+    editable: true
+    isDefault: true
+    orgId: 1
     version: 1
+
+  - name: "Minitwit DB"
+    type: postgres
+    url: db:5432
+    database: minitwit
+    user: docker
+    secureJsonData:
+      password: "docker"
+    jsonData:
+      sslmode: "disable" # disable/require/verify-ca/verify-full
+      maxOpenConns: 0         # Grafana v5.4+
+      maxIdleConns: 2         # Grafana v5.4+
+      connMaxLifetime: 14400  # Grafana v5.4+
+      postgresVersion: 903 # 903=9.3, 904=9.4, 905=9.5, 906=9.6, 1000=10
+      timescaledb: false

@@ -1,6 +1,5 @@
 const express = require('express');
 const { winston, levels } = require('../config/winston');
-const metrics = require('../utils/metrics');
 const updateLatest = require('../middleware/updateLatest');
 const simulatorAuth = require('../middleware/simulatorAuth');
 const UserRepository = require('../repositories/UserRepository');
@@ -71,14 +70,8 @@ async function getUser(username) {
  *          description: Unexpected error
  */
 router.get('/', [simulatorAuth, updateLatest], async (req, res) => {
-  metrics.getCounter.inc();
-  metrics.lastGetTime.setToCurrentTime();
-  const endTimer = metrics.lastGetTime.startTimer();
-
   const { no: noMsgs = 100 } = req.query;
   const messages = await MessageRepository.getAll(noMsgs);
-
-  endTimer();
 
   return res.send(messages);
 });
@@ -150,8 +143,6 @@ router.get('/', [simulatorAuth, updateLatest], async (req, res) => {
  *          description: Unexpected error
  */
 router.get('/:username', updateLatest, async (req, res) => {
-  metrics.getUsernameCounter.inc();
-
   const { no: noMsgs = 100 } = req.query;
 
   const user = await getUser(req.params.username);
@@ -221,8 +212,6 @@ router.get('/:username', updateLatest, async (req, res) => {
  *          description: Unexpected error
  */
 router.post('/:username', [simulatorAuth, updateLatest], async (req, res) => {
-  metrics.postUsernameCounter.inc();
-
   const user = await getUser(req.params.username);
   await MessageRepository.create(user, req.body.content);
 

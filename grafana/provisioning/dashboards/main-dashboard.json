@@ -19,19 +19,17 @@
   "links": [],
   "panels": [
     {
-      "content": "# Infrastructure",
+      "collapsed": false,
       "gridPos": {
-        "h": 2,
+        "h": 1,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 21,
-      "links": [],
-      "mode": "markdown",
-      "title": "",
-      "transparent": true,
-      "type": "text"
+      "id": 33,
+      "panels": [],
+      "title": "Infrastructure",
+      "type": "row"
     },
     {
       "aliasColors": {},
@@ -43,7 +41,7 @@
         "h": 7,
         "w": 19,
         "x": 0,
-        "y": 2
+        "y": 1
       },
       "id": 2,
       "legend": {
@@ -77,7 +75,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "1h",
+      "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
       "title": "CPU Usage",
@@ -142,7 +140,7 @@
         "h": 7,
         "w": 5,
         "x": 19,
-        "y": 2
+        "y": 1
       },
       "id": 19,
       "interval": null,
@@ -218,7 +216,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 8
       },
       "id": 4,
       "legend": {
@@ -273,7 +271,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": "1h",
+      "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
       "title": "Memory Usage",
@@ -314,154 +312,24 @@
       }
     },
     {
-      "type": "graph",
-      "title": "Uptime percentage",
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
       "gridPos": {
-        "x": 12,
-        "y": 9,
+        "h": 9,
         "w": 12,
-        "h": 9
+        "x": 12,
+        "y": 8
       },
       "id": 31,
-      "targets": [
-        {
-          "expr": "avg_over_time(up{job=\"minitwit-simulator\"}[15m])*100",
-          "intervalFactor": 1,
-          "format": "time_series",
-          "refId": "A",
-          "legendFormat": "Simulator"
-        },
-        {
-          "refId": "B",
-          "expr": "avg_over_time(up{job=\"prometheus\"}[15m])*100",
-          "intervalFactor": 1,
-          "format": "time_series",
-          "legendFormat": "Prometheus"
-        },
-        {
-          "refId": "C",
-          "expr": "avg_over_time(up{job=\"node-exporter\"}[15m])*100",
-          "intervalFactor": 1,
-          "format": "time_series",
-          "legendFormat": "Exporter"
-        }
-      ],
-      "renderer": "flot",
-      "yaxes": [
-        {
-          "label": null,
-          "show": true,
-          "logBase": 1,
-          "min": null,
-          "max": "100",
-          "format": "percent",
-          "decimals": null
-        },
-        {
-          "label": "",
-          "show": true,
-          "logBase": 1,
-          "min": null,
-          "max": null,
-          "format": "short"
-        }
-      ],
-      "xaxis": {
-        "show": true,
-        "mode": "time",
-        "name": null,
-        "values": [],
-        "buckets": null
-      },
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      },
-      "lines": true,
-      "fill": 1,
-      "linewidth": 1,
-      "dashes": false,
-      "dashLength": 10,
-      "spaceLength": 10,
-      "points": false,
-      "pointradius": 5,
-      "bars": false,
-      "stack": false,
-      "percentage": false,
-      "legend": {
-        "show": true,
-        "values": false,
-        "min": false,
-        "max": false,
-        "current": false,
-        "total": false,
-        "avg": false
-      },
-      "nullPointMode": "null",
-      "steppedLine": false,
-      "tooltip": {
-        "value_type": "individual",
-        "shared": true,
-        "sort": 0
-      },
-      "timeFrom": null,
-      "timeShift": null,
-      "aliasColors": {},
-      "seriesOverrides": [],
-      "thresholds": [],
-      "timeRegions": [],
-      "links": []
-    },
-    {
-      "content": "# Application",
-      "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 17
-      },
-      "id": 23,
-      "links": [],
-      "mode": "markdown",
-      "title": "",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "content": "## General",
-      "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 19
-      },
-      "id": 27,
-      "links": [],
-      "mode": "markdown",
-      "title": "",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "description": "Number of errors handled by the server",
-      "fill": 1,
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 21
-      },
-      "id": 5,
       "legend": {
         "avg": false,
         "current": false,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": false
       },
@@ -479,10 +347,132 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "minitwit_simulator_errors_counter",
+          "expr": "avg_over_time(up{job=\"minitwit-simulator\"}[15m])*100",
           "format": "time_series",
           "intervalFactor": 1,
+          "legendFormat": "Simulator",
           "refId": "A"
+        },
+        {
+          "expr": "avg_over_time(up{job=\"prometheus\"}[15m])*100",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Prometheus",
+          "refId": "B"
+        },
+        {
+          "expr": "avg_over_time(up{job=\"node-exporter\"}[15m])*100",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Exporter",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Uptime percentage",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": null,
+          "format": "percent",
+          "label": null,
+          "logBase": 1,
+          "max": "100",
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 35,
+      "panels": [],
+      "title": "General",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "Number of errors handled by the server",
+      "fill": 1,
+      "gridPos": {
+        "h": 12,
+        "w": 12,
+        "x": 0,
+        "y": 18
+      },
+      "id": 5,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_count{status_code=~\"4..\"})",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "4xx",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{status_code=~\"5..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "5xx",
+          "refId": "B"
         }
       ],
       "thresholds": [],
@@ -528,17 +518,139 @@
       }
     },
     {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorPrefix": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "Minitwit DB",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 39,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "80%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "",
+          "format": "time_series",
+          "group": [
+            {
+              "params": [
+                "$__interval",
+                "none"
+              ],
+              "type": "time"
+            }
+          ],
+          "intervalFactor": 1,
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  $__timeGroupAlias(\"createdAt\",$__interval),\n  count(id) AS \"id\"\nFROM users\nGROUP BY 1\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "users",
+          "timeColumn": "\"createdAt\"",
+          "timeColumnType": "timestamptz",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Users",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "total"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "description": "Number of users over time",
+      "datasource": "Minitwit DB",
+      "description": "",
       "fill": 1,
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 21
+        "y": 22
       },
       "id": 3,
       "legend": {
@@ -546,7 +658,7 @@
         "current": false,
         "max": false,
         "min": false,
-        "show": false,
+        "show": true,
         "total": false,
         "values": false
       },
@@ -565,17 +677,53 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "minitwit_simulator_users_count",
           "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
+          "group": [
+            {
+              "params": [
+                "1m",
+                "0"
+              ],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  $__timeGroupAlias(\"createdAt\",1m,0),\n  count(id) AS \"New users\"\nFROM users\nGROUP BY 1\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "id"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "count"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "New users"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "users",
+          "timeColumn": "\"createdAt\"",
+          "timeColumnType": "timestamptz",
+          "where": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Users",
+      "title": "Sign ups",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -614,479 +762,37 @@
       }
     },
     {
-      "content": "## Amount of requests on routes",
+      "collapsed": false,
       "gridPos": {
-        "h": 2,
+        "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 30
       },
-      "id": 29,
-      "links": [],
-      "mode": "markdown",
-      "title": "",
-      "transparent": true,
-      "type": "text"
+      "id": 37,
+      "panels": [],
+      "title": "Routes",
+      "type": "row"
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "description": "Number of GET calls to /msgs",
+      "description": "",
       "fill": 1,
       "gridPos": {
         "h": 9,
-        "w": 12,
+        "w": 17,
         "x": 0,
-        "y": 31
-      },
-      "id": 11,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "minitwit_simulator_get_msgs_calls",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "GET /msgs",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "description": "The number of POST calls to /msgs/:username",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
         "y": 31
       },
       "id": 17,
       "legend": {
         "avg": false,
-        "current": false,
+        "current": true,
         "max": false,
         "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "minitwit_simulator_post_msgs:username_calls",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "POST /msgs/:username",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "description": "The amount of POST calls to /fllws/:username",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 40
-      },
-      "id": 15,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "minitwit_simulator_post_fllws_username_calls",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "POST /fllws/:username",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "description": "Number of GET calls to /msgs/:username",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 12,
-        "y": 40
-      },
-      "id": 9,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "minitwit_simulator_get_msgs:username_calls",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "GET /msgs/:username",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "description": "Number of GET calls to /fllws/:username",
-      "fill": 1,
-      "gridPos": {
-        "h": 9,
-        "w": 12,
-        "x": 0,
-        "y": 49
-      },
-      "id": 7,
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "percentage": false,
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "minitwit_simulator_get_fllws_username_calls",
-          "format": "time_series",
-          "intervalFactor": 1,
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "GET /fllws/:username",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": 0,
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "content": "## Request time",
-      "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 58
-      },
-      "id": 25,
-      "links": [],
-      "mode": "markdown",
-      "title": "",
-      "transparent": true,
-      "type": "text"
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "description": "The amount of seconds a GET call to /msgs takes",
-      "fill": 1,
-      "gridPos": {
-        "h": 7,
-        "w": 14,
-        "x": 0,
-        "y": 60
-      },
-      "id": 13,
-      "legend": {
-        "avg": true,
-        "current": false,
-        "max": true,
-        "min": true,
         "show": true,
         "total": false,
         "values": true
@@ -1105,19 +811,31 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "minitwit_simulator_get_msgs_time",
+          "expr": "sum(http_request_duration_seconds_count{method=\"POST\", path=\"/msgs/#name\"})",
           "format": "time_series",
-          "hide": false,
-          "instant": false,
           "intervalFactor": 1,
+          "legendFormat": "# requests",
           "refId": "A"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"POST\", path=\"/msgs/#name\", status_code=~\"4..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "4xx errors",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"POST\", path=\"/msgs/#name\", status_code=~\"5..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "D"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "GET /msgs seconds",
+      "title": "POST /msgs/:username (total requests)",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -1133,7 +851,8 @@
       },
       "yaxes": [
         {
-          "format": "s",
+          "decimals": 0,
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1153,6 +872,815 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 31
+      },
+      "id": 43,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_sum{method=\"POST\", path=\"/msgs/#name\"}) * 1000 / sum(http_request_duration_seconds_count{method=\"POST\", path=\"/msgs/#name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "10, 30",
+      "title": "POST /msgs/:username (avg. response time)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 17,
+        "x": 0,
+        "y": 40
+      },
+      "id": 15,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"POST\", path=\"/fllws/#name\"})",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "# requests",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"POST\", path=\"/fllws/#name\", status_code=~\"4..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "4xx errors",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"POST\", path=\"/fllws/#name\", status_code=~\"5..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "5xx errors",
+          "refId": "D"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "POST /fllws/:username (total requests)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 40
+      },
+      "id": 45,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_sum{method=\"POST\", path=\"/fllws/#name\"}) * 1000 / sum(http_request_duration_seconds_count{method=\"POST\", path=\"/fllws/#name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "10, 30",
+      "title": "POST /fllws/:username (avg. response time)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "decimals": null,
+      "description": "",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 17,
+        "x": 0,
+        "y": 49
+      },
+      "id": 11,
+      "legend": {
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "# requests",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs\", status_code=~\"4..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "4xx errors",
+          "refId": "C"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs\", status_code=~\"5..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "D"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "GET /msgs (total requests)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 49
+      },
+      "id": 44,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_sum{method=\"GET\", path=\"/msgs\"}) * 1000 / sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "10, 30",
+      "title": "GET /msgs (avg. response time)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 17,
+        "x": 0,
+        "y": 58
+      },
+      "id": 9,
+      "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs/#name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "# requests",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs/#name\", status_code=~\"4..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "4xx errors",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs/#name\", status_code=~\"5..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "5xx errors",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "GET /msgs/:username (total requests)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 58
+      },
+      "id": 46,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_sum{method=\"GET\", path=\"/msgs/#name\"}) * 1000 / sum(http_request_duration_seconds_count{method=\"GET\", path=\"/msgs/#name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "10, 30",
+      "title": "GET /msgs/:username (avg. response time)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "description": "Number of GET calls to /fllws/:username",
+      "fill": 1,
+      "gridPos": {
+        "h": 9,
+        "w": 17,
+        "x": 0,
+        "y": 67
+      },
+      "id": 7,
+      "legend": {
+        "avg": false,
+        "current": true,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/fllws/#name\"})",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "# requests",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/fllws/#name\", status_code=~\"4..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "4xx errors",
+          "refId": "B"
+        },
+        {
+          "expr": "sum(http_request_duration_seconds_count{method=\"GET\", path=\"/fllws/#name\", status_code=~\"5..\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "5xx errors",
+          "refId": "C"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "GET /fllws/:username (total requests)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "decimals": 2,
+      "format": "ms",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 17,
+        "y": 67
+      },
+      "id": 47,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "sum(http_request_duration_seconds_sum{method=\"GET\", path=\"/fllws/#name\"}) * 1000 / sum(http_request_duration_seconds_count{method=\"GET\", path=\"/fllws/#name\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "10, 30",
+      "title": "GET /fllws/:username (avg. response time)",
+      "type": "singlestat",
+      "valueFontSize": "200%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
     }
   ],
   "refresh": false,
@@ -1163,7 +1691,7 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {

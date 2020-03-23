@@ -1,5 +1,4 @@
 const express = require('express');
-const metrics = require('../utils/metrics');
 const updateLatest = require('../middleware/updateLatest');
 const simulatorAuth = require('../middleware/simulatorAuth');
 const UserRepository = require('../repositories/UserRepository');
@@ -87,8 +86,6 @@ async function getUser(username) {
  *          description: Unexpected error
  */
 router.get('/:username', [simulatorAuth, updateLatest], async (req, res) => {
-  metrics.getUsernameCounter.inc();
-
   const { no: noFollowers = 100 } = req.body;
 
   winston.log(levels.info, `Get followers for username: ${req.params.username}`);
@@ -174,8 +171,6 @@ router.get('/:username', [simulatorAuth, updateLatest], async (req, res) => {
  *          description: Unexpected error
  */
 router.post('/:username', [simulatorAuth, updateLatest], async (req, res) => {
-  metrics.postUsernameCounter.inc();
-
   const user = await getUser(req.params.username);
   const keys = Object.keys(req.body);
 

@@ -1,9 +1,6 @@
-const metrics = require('../utils/metrics');
 const Error = require('../dtos/error');
 
-module.exports = function (err, _req, res, next) {
-  metrics.errorsCounter.inc();
-
+module.exports = (err, _req, res, next) => {
   if (err.message.toLowerCase().includes('bad request')) {
     return res.status(400).send(new Error(err.message));
   }

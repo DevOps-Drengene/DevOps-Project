@@ -60,8 +60,21 @@ describe('/register', () => {
 
     request(app)
       .post('/register')
-      .send({ username: 'caspar' })
+      .send({ username: 'caspar', pwd: 'caspar', email: 'cole@itu.dk' })
       .expect(500)
+      .end((err) => {
+        if (err) return done(err);
+        return done();
+      });
+  });
+
+  it('returns 400 if no email is given', (done) => {
+    td.when(UserRepository.getByUsername('caspar')).thenReject(new Error('ERROR!'));
+
+    request(app)
+      .post('/register')
+      .send({ username: 'caspar', pwd: 'caspar' })
+      .expect(400)
       .end((err) => {
         if (err) return done(err);
         return done();

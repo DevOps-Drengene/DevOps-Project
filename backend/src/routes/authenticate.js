@@ -1,6 +1,7 @@
 const express = require('express');
 const updateLatest = require('../middleware/updateLatest');
 const UserRepository = require('../repositories/UserRepository');
+const { winston, levels } = require('../config/winston');
 
 const router = express.Router();
 
@@ -60,10 +61,21 @@ const router = express.Router();
 router.post('/register', updateLatest, async (req, res) => {
   const { username, email, pwd } = req.body;
 
+  if (!username || !email || !pwd) {
+    winston.log(levels.warn, `"${username}" failed to register since they did not provide username, email and password. username: ${!!username}, email: ${!!email}, pwd: ${!!pwd}`);
+    throw new Error('Bad Request: Did not provide username, email and password');
+  }
+
   const user = await UserRepository.getByUsername(username);
-  if (user) throw new Error('Bad Request: That username is already taken');
+
+  if (user) {
+    winston.log(levels.info, `${email} failed to register since the username "${username}" was taken`);
+    throw new Error('Bad Request: That username is already taken');
+  }
 
   await UserRepository.create(username, email, pwd);
+
+  winston.log(levels.info, `"${username}" has been registered with email ${email}`);
 
   return res.status(204).send();
 });

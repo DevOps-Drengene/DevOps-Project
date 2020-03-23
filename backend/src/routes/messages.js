@@ -1,4 +1,5 @@
 const express = require('express');
+const { winston, levels } = require('../config/winston');
 const metrics = require('../utils/metrics');
 const updateLatest = require('../middleware/updateLatest');
 const simulatorAuth = require('../middleware/simulatorAuth');
@@ -156,6 +157,8 @@ router.get('/:username', updateLatest, async (req, res) => {
   const user = await getUser(req.params.username);
   const messages = await MessageRepository.getMessagesByUser(user, noMsgs);
 
+  winston.log(levels.info, `${req.params.username}'s messages have been viewed`);
+
   return res.send(messages);
 });
 
@@ -222,6 +225,8 @@ router.post('/:username', [simulatorAuth, updateLatest], async (req, res) => {
 
   const user = await getUser(req.params.username);
   await MessageRepository.create(user, req.body.content);
+
+  winston.log(levels.info, `${req.params.username} has postet the message "${req.body.content}"`);
 
   return res.status(204).send();
 });

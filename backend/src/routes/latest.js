@@ -1,4 +1,6 @@
 const express = require('express');
+const { winston, levels } = require('../config/winston');
+
 const metrics = require('../utils/metrics');
 
 const router = express.Router();
@@ -25,6 +27,7 @@ const router = express.Router();
  */
 router.get('/', async (_req, res) => {
   metrics.sampleCounter.inc();
+  winston.log(levels.info, 'latest was called!');
   return res.send({ latest: global.latestCounter });
 });
 

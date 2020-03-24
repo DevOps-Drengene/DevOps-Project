@@ -1,4 +1,5 @@
 const Error = require('../dtos/error');
+const { winston, levels } = require('../config/winston');
 
 module.exports = (err, _req, res, next) => {
   if (err.message.toLowerCase().includes('bad request')) {
@@ -13,6 +14,7 @@ module.exports = (err, _req, res, next) => {
     return res.status(404).send(new Error(err.message));
   }
 
+  winston.log(levels.error, `Something went wrong: ${err.message}`);
   res.status(500).send(new Error(err.message));
 
   return next();

@@ -176,14 +176,14 @@ router.post('/:username', [simulatorAuth, updateLatest], async (req, res) => {
 
   if (keys.includes('follow')) {
     const userToFollow = await getUser(req.body.follow);
-    winston.log(levels.info, `follower ${user} follows ${userToFollow}`);
+    winston.log(levels.info, `follower ${user.username} follows ${userToFollow}`);
     await UserRepository.addFollow(user, userToFollow);
     return res.status(204).send();
   }
 
   if (keys.includes('unfollow')) {
     const userToUnFollow = await getUser(req.body.unfollow);
-    winston.log(levels.info, `follower ${user} unfollows ${userToUnFollow}`);
+    winston.log(levels.info, `follower ${user.username} unfollows ${userToUnFollow}`);
     await UserRepository.removeFollow(user, userToUnFollow);
     return res.status(204).send();
   }

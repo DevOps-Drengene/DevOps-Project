@@ -27,3 +27,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=Helge&friends
       - GF_SECURITY_ADMIN_PASSWORD=uiUIui # Super safe
+
+  filebeat:
+    environment:
+      - -strict.perms=false
+      - LOGSTASH_HOST=188.166.193.149

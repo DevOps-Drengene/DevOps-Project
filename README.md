@@ -18,10 +18,21 @@
     - Simulator API Swagger docs: `localhost:5001/api-docs`
     - Prometheus API: `localhost:9090`
     - Grafana: `localhost:3001`
+    - Kibana: `localhost:5601`
 
 Grafana admin credentials (in non-prod mode):
 - Username: `admin`
 - Password: `admin`
+
+Kibana credentials:
+- Username: `elastic`
+- Password: `changeme`
+
+## Production URLs
+- Frontend: `http://157.245.27.128:3000`
+- Simulator API: `http://157.245.27.128:5001`
+- Grafana monitoring dashboard: `http://157.245.27.128:3001`
+- Kibana: `http://188.166.193.149:5601`
 
 ## Deploy and run with Vagrant on Digital Ocean
 1. Add `SSH_KEY_NAME` and `DIGITAL_OCEAN_TOKEN` to your environment.

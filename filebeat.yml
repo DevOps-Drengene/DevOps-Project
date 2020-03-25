@@ -1,0 +1,44 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+      json.message_key: log
+      templates:
+        - condition:
+            equals:
+              docker.containers.labels.filebeat_enable: "true"
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              exclude_lines: ["^\\s+[\\-`('.|_]"] # drop asciiart lines
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+processors:
+  # decode the log field (sub JSON document) if JSON encoded, then maps it's fields to elasticsearch fields
+  - decode_json_fields:
+      fields: ["log", "message"]
+      target: ""
+      # overwrite existing target elasticsearch fields while decoding json fields
+      overwrite_keys: true
+  - add_docker_metadata:
+      host: "unix:///var/run/docker.sock"
+  - add_cloud_metadata: ~
+
+output.logstash:
+  hosts: ["${LOGSTASH_HOST}:5000"]
+
+# Write Filebeat own logs only to file to avoid catching them with itself in docker log files
+logging.level: error
+logging.to_files: false
+logging.to_syslog: false
+loggins.metrice.enabled: false
+logging.files:
+  path: /var/log/filebeat
+  name: filebeat
+  keepfiles: 7
+  permissions: 0644
+ssl.verification_mode: none

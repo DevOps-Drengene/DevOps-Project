@@ -6,6 +6,10 @@ d-build-project:
 d-up-project:
 	docker-compose up -d
 
+# Docker up project with Filebeat sending data to external ELK project
+d-up-project-elk:
+	docker-compose -f docker-compose.yml -f docker-compose.elk.yml up -d
+
 # Docker down project
 d-down-project:
 	docker-compose down

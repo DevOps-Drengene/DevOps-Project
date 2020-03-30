@@ -1,9 +1,4 @@
 const db = require('../config/db');
-const Message = require('../dtos/message');
-
-function formatMessages(messages) {
-  return messages.map((msg) => new Message(msg.text, msg.createdAt, msg.user.username));
-}
 
 function formatMessages2(messages) {
   return messages.map((msg) => ({
@@ -17,26 +12,56 @@ function formatMessages2(messages) {
 
 module.exports = {
   async getAll(limit, includeEmailAndId) {
-    const messages = await db.message.findAll({
-      include: [db.user],
+    if (includeEmailAndId) {
+      return db.message.findAll({
+        include: { model: db.user, attributes: [] },
+        where: { flagged: false },
+        order: [['createdAt', 'DESC']],
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'flagged', 'id'],
+          include: [
+            'user.username',
+            'user.email',
+            ['createdAt', 'pubDate'],
+          ],
+        },
+        limit,
+        raw: true,
+      });
+    }
+    return db.message.findAll({
+      include: { model: db.user, attributes: [] },
       where: { flagged: false },
       order: [['createdAt', 'DESC']],
+      attributes: {
+        exclude: ['userId', 'createdAt', 'updatedAt', 'text', 'flagged', 'id'],
+        include: [
+          [db.sequelize.col('user.username'), 'user'],
+          ['createdAt', 'pub_date'],
+          ['text', 'content'],
+        ],
+      },
       limit,
+      raw: true,
     });
-    if (includeEmailAndId) return formatMessages2(messages);
-
-    return formatMessages(messages);
   },
 
   async getMessagesByUser(user, limit) {
-    const messages = await user.getMessages({
-      include: [db.user],
+    return user.getMessages({
+      include: { model: db.user, attributes: [] },
       where: { flagged: false },
       order: [['createdAt', 'DESC']],
+      attributes: {
+        exclude: ['userId', 'createdAt', 'updatedAt', 'text', 'flagged', 'id'],
+        include: [
+          [db.sequelize.col('user.username'), 'user'],
+          ['createdAt', 'pub_date'],
+          ['text', 'content'],
+        ],
+      },
       limit,
+      raw: true,
     });
-
-    return formatMessages(messages);
   },
 
   async getTimeline(user, limit) {

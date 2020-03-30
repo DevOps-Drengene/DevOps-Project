@@ -6,6 +6,11 @@ d-build-project:
 d-up-project:
 	docker-compose up -d
 
+# Start development environment
+dev:
+	$(MAKE) d-build-project
+	$(MAKE) d-up-project
+
 # Docker up project with Filebeat sending data to external ELK project
 d-up-project-elk:
 	docker-compose -f docker-compose.yml -f docker-compose.elk.yml up -d

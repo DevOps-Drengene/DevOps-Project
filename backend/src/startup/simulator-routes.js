@@ -4,6 +4,7 @@ const swaggerSpec = require('../config/simulator-swagger');
 const { authenticate, messages, follows, latest } = require('../routes');
 const errorMiddleware = require('../middleware/error');
 const metricsMiddleware = require('../middleware/metrics');
+const httpLogger = require('../middleware/httpLogger');
 
 /**
  * Sets up routes and middleware for simulator REST API
@@ -13,6 +14,9 @@ module.exports = (app) => {
   // Has to be **before** the routes
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
+
+  // Log http requests
+  app.use(httpLogger);
 
   // Prometheus metrics middleware
   // Has to be **before** the routes

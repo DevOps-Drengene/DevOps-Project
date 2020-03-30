@@ -1,7 +1,8 @@
 const Error = require('../dtos/error');
 const { winston, levels } = require('../config/winston');
+const stringifyRequest = require('./util/stringify-http-request');
 
-module.exports = (err, _req, res, next) => {
+module.exports = (err, req, res, next) => {
   if (err.message.toLowerCase().includes('bad request')) {
     return res.status(400).send(new Error(err.message));
   }
@@ -14,7 +15,7 @@ module.exports = (err, _req, res, next) => {
     return res.status(404).send(new Error(err.message));
   }
 
-  winston.log(levels.error, `Something went wrong: ${err.message}`);
+  winston.log(levels.error, `Internal server error: ${err.message}. Receive HTTP request: ${stringifyRequest(req)}`);
   res.status(500).send(new Error(err.message));
 
   return next();

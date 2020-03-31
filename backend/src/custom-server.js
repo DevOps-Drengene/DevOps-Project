@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const helmet = require('helmet');
 const messageRepository = require('./repositories/MessageRepository');
 const userRepository = require('./repositories/UserRepository');
 
@@ -9,6 +10,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+app.use(helmet.noSniff());
+app.use(helmet.frameguard({ action: 'deny' }));
 
 app.post('/register', async (req, res) => {
   try {

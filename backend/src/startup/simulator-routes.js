@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const swaggerUi = require('swagger-ui-express');
+const helmet = require('helmet');
 const swaggerSpec = require('../config/simulator-swagger');
 const { authenticate, messages, follows, latest } = require('../routes');
 const errorMiddleware = require('../middleware/error');
@@ -17,6 +18,10 @@ module.exports = (app) => {
 
   // Log http requests
   app.use(httpLogger);
+
+  // Request Header Properties
+  app.use(helmet.noSniff());
+  app.use(helmet.frameguard({ action: 'deny' }));
 
   // Prometheus metrics middleware
   // Has to be **before** the routes

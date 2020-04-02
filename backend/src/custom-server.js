@@ -10,7 +10,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-app.use(helmet.noSniff());
+app.use(helmet());
 app.use(helmet.frameguard({ action: 'deny' }));
 
 app.post('/register', async (req, res) => {

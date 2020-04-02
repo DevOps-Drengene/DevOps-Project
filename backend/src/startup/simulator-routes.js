@@ -20,7 +20,7 @@ module.exports = (app) => {
   app.use(httpLogger);
 
   // Request Header Properties
-  app.use(helmet.noSniff());
+  app.use(helmet());
   app.use(helmet.frameguard({ action: 'deny' }));
 
   // Prometheus metrics middleware

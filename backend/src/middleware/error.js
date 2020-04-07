@@ -3,7 +3,10 @@ const winston = require('../config/winston');
 const { BadRequestError, ForbiddenError, NotFoundError } = require('../errors');
 
 module.exports = (err, req, res, next) => {
-  if (err instanceof BadRequestError) {
+  if (err instanceof URIError) {
+    winston.error(`400: ${err.message}`);
+    res.status(400).send(new Error('Malformed params in URL. Ensure no special characters are used.'));
+  } else if (err instanceof BadRequestError) {
     winston.error(`400: ${err.message}`);
     res.status(400).send(new Error(err.message));
   } else if (err instanceof ForbiddenError) {

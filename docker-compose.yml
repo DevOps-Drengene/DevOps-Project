@@ -40,7 +40,7 @@ services:
         networks:
             - main
         ports:
-            - "5000:5001"
+            - "5002:5001"
         command: bash -c "/wait && npm start"
         depends_on:
             - db

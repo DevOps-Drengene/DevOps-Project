@@ -1,5 +1,5 @@
 function makeUrl(path) {
-  return `http://${window.location.hostname}:5000${path}`;
+  return `http://${window.location.hostname}:5002${path}`;
 }
 
 function get(path) {

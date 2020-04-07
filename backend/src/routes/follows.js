@@ -2,16 +2,16 @@ const express = require('express');
 const updateLatest = require('../middleware/updateLatest');
 const simulatorAuth = require('../middleware/simulatorAuth');
 const UserRepository = require('../repositories/UserRepository');
-const { winston, levels } = require('../config/winston');
+const winston = require('../config/winston');
+const { BadRequestError, NotFoundError } = require('../errors');
 
 const router = express.Router();
 
 async function getUser(username) {
   const user = await UserRepository.getByUsername(username);
-  if (!user) {
-    winston.log(levels.warn, `User ${username} not found`);
-    throw new Error(`User ${username} not found`);
-  }
+
+  if (!user) throw new NotFoundError(`User ${username} not found`);
+
   return user;
 }
 
@@ -71,7 +71,7 @@ async function getUser(username) {
  *                    items:
  *                      $ref: '#/components/schemas/UserFollow'
  *        403:
- *          description: Unauthorized
+ *          description: Forbidden
  *          content:
  *            application/json:
  *              schema:
@@ -87,10 +87,11 @@ async function getUser(username) {
  */
 router.get('/:username', [simulatorAuth, updateLatest], async (req, res) => {
   const { no: noFollowers = 100 } = req.body;
+  const { username } = req.params;
 
-  winston.log(levels.info, `Get followers for username: ${req.params.username}`);
+  winston.info(`Get followers for username: ${username}`);
 
-  const user = await getUser(req.params.username);
+  const user = await getUser(username);
   const followRes = await UserRepository.getFollowing(user, noFollowers);
   const follows = followRes.map((flw) => flw.username);
 
@@ -171,25 +172,26 @@ router.get('/:username', [simulatorAuth, updateLatest], async (req, res) => {
  *          description: Unexpected error
  */
 router.post('/:username', [simulatorAuth, updateLatest], async (req, res) => {
-  const user = await getUser(req.params.username);
+  const { username } = req.params;
+
+  const user = await getUser(username);
   const keys = Object.keys(req.body);
 
   if (keys.includes('follow')) {
     const userToFollow = await getUser(req.body.follow);
-    winston.log(levels.info, `follower ${user.username} follows ${userToFollow}`);
+    winston.info(`${user.username} follows ${userToFollow.username}`);
     await UserRepository.addFollow(user, userToFollow);
     return res.status(204).send();
   }
 
   if (keys.includes('unfollow')) {
     const userToUnFollow = await getUser(req.body.unfollow);
-    winston.log(levels.info, `follower ${user.username} unfollows ${userToUnFollow}`);
+    winston.info(`${user.username} unfollows ${userToUnFollow.username}`);
     await UserRepository.removeFollow(user, userToUnFollow);
     return res.status(204).send();
   }
 
-  winston.log(levels.warn, `Bad Request: Neither the follow or the unfollow key was given in request for username ${req.params.username}`);
-  throw new Error('Bad Request: Neither the follow or the unfollow key was given in request');
+  throw new BadRequestError(`Neither the follow or the unfollow key was given in request for username ${username}`);
 });
 
 module.exports = router;

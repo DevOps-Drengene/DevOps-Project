@@ -1,5 +1,5 @@
 const express = require('express');
-const { winston, levels } = require('../config/winston');
+const winston = require('../config/winston');
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ const router = express.Router();
  *          description: Unexpected error
  */
 router.get('/', async (_req, res) => {
-  winston.log(levels.info, 'latest was called!');
+  winston.info('latest was called!');
   return res.send({ latest: global.latestCounter });
 });
 

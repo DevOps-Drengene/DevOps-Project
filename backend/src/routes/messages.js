@@ -1,15 +1,16 @@
 const express = require('express');
-const { winston, levels } = require('../config/winston');
+const winston = require('../config/winston');
 const updateLatest = require('../middleware/updateLatest');
 const simulatorAuth = require('../middleware/simulatorAuth');
 const UserRepository = require('../repositories/UserRepository');
 const MessageRepository = require('../repositories/MessageRepository');
+const { NotFoundError } = require('../errors');
 
 const router = express.Router();
 
 async function getUser(username) {
   const user = await UserRepository.getByUsername(username);
-  if (!user) throw new Error(`User ${username} not found`);
+  if (!user) throw new NotFoundError(`User ${username} not found`);
   return user;
 }
 
@@ -148,7 +149,7 @@ router.get('/:username', updateLatest, async (req, res) => {
   const user = await getUser(req.params.username);
   const messages = await MessageRepository.getMessagesByUser(user, noMsgs);
 
-  winston.log(levels.info, `${req.params.username}'s messages have been viewed`);
+  winston.info(`${req.params.username}'s messages have been viewed`);
 
   return res.send(messages);
 });
@@ -212,10 +213,13 @@ router.get('/:username', updateLatest, async (req, res) => {
  *          description: Unexpected error
  */
 router.post('/:username', [simulatorAuth, updateLatest], async (req, res) => {
-  const user = await getUser(req.params.username);
-  await MessageRepository.create(user, req.body.content);
+  const { username } = req.params;
+  const { content } = req.body;
 
-  winston.log(levels.info, `${req.params.username} has postet the message "${req.body.content}"`);
+  const user = await getUser(username);
+  await MessageRepository.create(user, content);
+
+  winston.info(`${username} has posted the message "${content}"`);
 
   return res.status(204).send();
 });

@@ -1,7 +1,7 @@
 const stringifyRequest = require('./util/stringify-http-request');
-const { winston, levels } = require('../config/winston');
+const winston = require('../config/winston');
 
 module.exports = (req, _res, next) => {
-  winston.log(levels.info, stringifyRequest(req));
+  winston.info(stringifyRequest(req));
   next();
 };

@@ -2,7 +2,6 @@ const express = require('express');
 const winston = require('../config/winston');
 const updateLatest = require('../middleware/updateLatest');
 const simulatorAuth = require('../middleware/simulatorAuth');
-const slower = require('../middleware/slower');
 const UserRepository = require('../repositories/UserRepository');
 const MessageRepository = require('../repositories/MessageRepository');
 const { NotFoundError } = require('../errors');
@@ -71,7 +70,7 @@ async function getUser(username) {
  *        default:
  *          description: Unexpected error
  */
-router.get('/', [simulatorAuth, updateLatest, slower], async (req, res) => {
+router.get('/', [simulatorAuth, updateLatest], async (req, res) => {
   const { no: noMsgs = 100 } = req.query;
   const messages = await MessageRepository.getAll(noMsgs);
 

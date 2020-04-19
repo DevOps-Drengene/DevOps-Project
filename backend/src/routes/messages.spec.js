@@ -7,8 +7,6 @@ let UserRepository;
 let MessageRepository;
 let app;
 
-jest.setTimeout(6000);
-
 describe('/msgs', () => {
   beforeEach(() => {
     UserRepository = td.replace('../repositories/UserRepository');

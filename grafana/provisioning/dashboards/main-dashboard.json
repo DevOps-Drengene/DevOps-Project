@@ -179,7 +179,7 @@
       "tableColumn": "device",
       "targets": [
         {
-          "expr": "100 - ((node_filesystem_avail_bytes{mountpoint=\"/mnt/prod_db_volume\",fstype!=\"rootfs\"} * 100) / node_filesystem_size_bytes{mountpoint=\"/mnt/prod_db_volume\",fstype!=\"rootfs\"})",
+          "expr": "100 - ((node_filesystem_avail_bytes{mountpoint=\"/mnt/prod-db-volume\",fstype!=\"rootfs\"} * 100) / node_filesystem_size_bytes{mountpoint=\"/mnt/prod-db-volume\",fstype!=\"rootfs\"})",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,

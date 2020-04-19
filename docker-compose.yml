@@ -11,6 +11,8 @@ services:
             - main
         expose:
             - "5432"
+        ports:
+            - "5432:5432"
         # Upon startup, it will create a Postgress user 'docker' with password 'docker',
         # and a database called 'minitwit'.
         environment:

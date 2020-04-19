@@ -6,9 +6,13 @@ const sequelize = new Sequelize(
   process.env.PSQL_DB_USER_PASSWORD,
   {
     host: process.env.PSQL_HOST_NAME || 'localhost',
+    port: process.env.PSQL_HOST_PORT || 5432,
     dialect: 'postgres',
     pool: { max: 30 },
     logging: false,
+    dialectOptions: {
+      ssl: process.env.PSQL_SSL_ENABLE || false,
+    },
   },
 );
 

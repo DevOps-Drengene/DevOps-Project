@@ -35,31 +35,6 @@ services:
             - PSQL_HOST_NAME=db # Must be the same as the name of the 'db' service
             - WAIT_HOSTS=db:5432
 
-    custom-api:
-        build: ./backend
-        networks:
-            - main
-        ports:
-            - "5002:5001"
-        command: bash -c "/wait && npm start"
-        depends_on:
-            - db
-        environment:
-            - PSQL_DB_NAME=minitwit # Must be the same as 'POSTGRES_DB' in 'db' service
-            - PSQL_DB_USER_NAME=docker # Must be the same as 'POSTGRES_USER' in 'db' service
-            - PSQL_DB_USER_PASSWORD=docker # Must be the same as 'POSTGRES_PASSWORD' in 'db' service
-            - PSQL_HOST_NAME=db # Must be the same as the name of the 'db' service
-            - WAIT_HOSTS=db:5432
-
-    frontend:
-        build: ./frontend
-        networks:
-            - main
-        ports:
-            - "3000:3000"
-        depends_on:
-            - custom-api
-
     # From: https://github.com/stefanprodan/dockprom/blob/master/docker-compose.yml
     node-exporter:
         image: prom/node-exporter
@@ -87,7 +62,6 @@ services:
             - main
         depends_on:
             - simulator-api
-            - custom-api
             - node-exporter
 
     grafana:

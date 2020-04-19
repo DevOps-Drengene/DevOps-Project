@@ -10,14 +10,6 @@ services:
     # Manual hack: wait for DB to be ready, and then start container
     command: /bin/sh -c 'while ! nc -z db 5432; do sleep 5; done; npm run simulator'
 
-  custom-api:
-    image: dagandersen/backend
-    # Manual hack: wait for DB to be ready, and then start container
-    command: /bin/sh -c 'while ! nc -z db 5432; do sleep 5; done; npm start'
-
-  frontend:
-    image: dagandersen/frontend
-
   prometheus:
     volumes:
       - /mnt/prod-db-volume/docker/volumes/minitwit/prometheus-data:/prometheus

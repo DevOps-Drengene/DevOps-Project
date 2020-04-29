@@ -118,11 +118,11 @@ app.get('/user/:username/:currentUserId?', async (req, res) => {
 });
 
 app.post('/:username/follow', async (req, res) => {
-  processFollowRequest(req, res, userRepository.addFollow);
+  await processFollowRequest(req, res, userRepository.addFollow);
 });
 
 app.post('/:username/unfollow', async (req, res) => {
-    await processFollowRequest(req, res, userRepository.removeFollow);
+  await processFollowRequest(req, res, userRepository.removeFollow);
 });
 
 async function processFollowRequest(req, res, followFunction) {
@@ -164,7 +164,5 @@ app.post('/add_message', async (req, res) => {
     return res.status(500).send(err.message);
   }
 });
-
-function getFollower 
 
 module.exports = app;

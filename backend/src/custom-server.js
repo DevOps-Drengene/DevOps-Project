@@ -118,27 +118,14 @@ app.get('/user/:username/:currentUserId?', async (req, res) => {
 });
 
 app.post('/:username/follow', async (req, res) => {
-  try {
-    const { currentUserId } = req.body;
-    const { username } = req.params;
-
-    if (!currentUserId) return res.status(401).send({ error: 'currentUserId is missing' });
-
-    const follower = await userRepository.getById(currentUserId);
-
-    const followed = await userRepository.getByUsername(username);
-
-    if (!follower || !followed) return res.status(404).send({ error: 'User not found' });
-
-    await userRepository.addFollow(follower, followed);
-
-    return res.status(204).send();
-  } catch (err) {
-    return res.status(500).send(err.message);
-  }
+  processFollowRequest(req, res, userRepository.addFollow);
 });
 
 app.post('/:username/unfollow', async (req, res) => {
+    await processFollowRequest(req, res, userRepository.removeFollow);
+});
+
+async function processFollowRequest(req, res, followFunction) {
   try {
     const { currentUserId } = req.body;
     const { username } = req.params;
@@ -146,18 +133,17 @@ app.post('/:username/unfollow', async (req, res) => {
     if (!currentUserId) return res.status(401).send({ error: 'currentUserId is missing' });
 
     const follower = await userRepository.getById(currentUserId);
-
     const followed = await userRepository.getByUsername(username);
 
     if (!follower || !followed) return res.status(404).send({ error: 'User not found' });
 
-    await userRepository.removeFollow(follower, followed);
+    await followFunction(follower, followed);
 
     return res.status(204).send();
   } catch (err) {
     return res.status(500).send(err.message);
   }
-});
+};
 
 app.post('/add_message', async (req, res) => {
   try {
@@ -178,5 +164,7 @@ app.post('/add_message', async (req, res) => {
     return res.status(500).send(err.message);
   }
 });
+
+function getFollower 
 
 module.exports = app;

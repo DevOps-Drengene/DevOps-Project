@@ -116,6 +116,18 @@ jobs:
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml pull 
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
+      - name: Rolling updates
+        uses: appleboy/ssh-action@master
+        with:
+          host: 167.172.180.155 # Leader IP
+          USERNAME: root
+          KEY: ${{ secrets.CI_swarm_private_key }}
+          script: |
+            echo ${{ secrets.db-config }} >> db-config
+            source db-config
+            docker stack up minitwit -c minitwit_stack.yml
+            docker service update -d --image dagandersen/frontend:latest minitwit_fontend
+
       - name: Bump version and push tag
         id: tagger
         uses: anothrNick/github-tag-action@1.17.2
@@ -142,3 +154,6 @@ jobs:
             ${{ steps.commit_message.outputs.message }}
           draft: false
           prerelease: false
+
+
+          

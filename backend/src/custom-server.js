@@ -117,14 +117,6 @@ app.get('/user/:username/:currentUserId?', async (req, res) => {
   }
 });
 
-app.post('/:username/follow', async (req, res) => {
-  await processFollowRequest(req, res, userRepository.addFollow);
-});
-
-app.post('/:username/unfollow', async (req, res) => {
-  await processFollowRequest(req, res, userRepository.removeFollow);
-});
-
 async function processFollowRequest(req, res, followFunction) {
   try {
     const { currentUserId } = req.body;
@@ -143,7 +135,15 @@ async function processFollowRequest(req, res, followFunction) {
   } catch (err) {
     return res.status(500).send(err.message);
   }
-};
+}
+
+app.post('/:username/follow', async (req, res) => {
+  await processFollowRequest(req, res, userRepository.addFollow);
+});
+
+app.post('/:username/unfollow', async (req, res) => {
+  await processFollowRequest(req, res, userRepository.removeFollow);
+});
 
 app.post('/add_message', async (req, res) => {
   try {

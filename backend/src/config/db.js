@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
     pool: { max: 30 },
     logging: false,
     dialectOptions: {
-      ssl: process.env.PSQL_SSL_ENABLE || false,
+      sslmode: process.env.PSQL_SSL_MODE || 'disable',
     },
   },
 );

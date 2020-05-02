@@ -17,7 +17,7 @@ export default function App() {
     <Router>
       <UserProvider>
         <div className="page">
-          <h1>MiniTwit</h1>
+          <h1>ITU MiniTwit</h1>
           <Nav />
           <div className="body">
             <Switch>

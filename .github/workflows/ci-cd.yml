@@ -155,5 +155,15 @@ jobs:
           draft: false
           prerelease: false
 
-
-          
+      - name: Rolling Updates
+        uses: appleboy/ssh-action@master
+        with:
+          host: 157.245.25.142 # Leader IP
+          USERNAME: root
+          KEY: ${{ secrets.CI_swarm_private_key }}
+          script: |
+            echo ${{ secrets.db-config }} >> db-config
+            source db-config
+            docker stack up minitwit -c minitwit_stack.yml
+            docker service update -d --image dagandersen/frontend:latest minitwit_frontend
+            docker service update -d --image dagandersen/backend:latest minitwit_custom-api 

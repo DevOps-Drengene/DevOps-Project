@@ -52,4 +52,4 @@ yargs
   .demandCommand(1)
   .strict()
   .help()
-  .argv;
+  .parse();
